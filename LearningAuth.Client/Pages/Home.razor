@@ -1,0 +1,30 @@
+﻿@page "/"
+@inject HttpClient ApiClient
+@using System.ComponentModel.DataAnnotations
+
+<EditForm Model="_user" OnValidSubmit="SubmitCredentials">
+	<label>Username</label>
+	<InputText @bind-Value="_user.Username" />
+	<label>Password</label>
+	<InputText type="password" @bind-Value="_user.Password" />
+	<button type="submit">Login</button>
+	<br />
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+</EditForm>
+
+<h1>@_messageFromAbove</h1>
+
+@code {
+	UserModel _user = default!;
+	string _messageFromAbove = string.Empty;
+	protected override void OnInitialized() => _user ??= new();
+
+	async Task SubmitCredentials()
+	{
+		using var response = await ApiClient.PostAsJsonAsync("/users/login", _user);
+		string content = await response.Content.ReadAsStringAsync();
+
+		_messageFromAbove = $"{content} ({response.StatusCode})";
+	}
+}
