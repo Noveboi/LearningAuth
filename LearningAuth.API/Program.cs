@@ -1,3 +1,7 @@
+using LearningAuth.API.Authentication;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<AuthenticatorService>();
+
+// Add CORS service to allow cross-origin requests
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("AllowWasm", policy =>
@@ -27,9 +34,6 @@ if (app.Environment.IsDevelopment())
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
-
-app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

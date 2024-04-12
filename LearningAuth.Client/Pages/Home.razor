@@ -1,6 +1,9 @@
 ﻿@page "/"
 @inject HttpClient ApiClient
+@inject AuthService Authentication
 @using System.ComponentModel.DataAnnotations
+@using System.Net
+@using LearningAuth.Client.Authentication
 
 <EditForm Model="_user" OnValidSubmit="SubmitCredentials">
 	<label>Username</label>
@@ -15,16 +18,50 @@
 
 <h1>@_messageFromAbove</h1>
 
+<button @onclick="SendGetPerson">Get Person</button>
+@if (_person != null)
+{
+	<h1>@_person.FirstName @(_person.LastName), Age @_person.Age</h1>
+}
+<br />
+<h1>@_personMessage</h1>
+
 @code {
 	UserModel _user = default!;
+	PersonModel? _person;
 	string _messageFromAbove = string.Empty;
+	string _personMessage = string.Empty;
+
 	protected override void OnInitialized() => _user ??= new();
 
+	// Invoked when user clicks "Login" button
 	async Task SubmitCredentials()
 	{
+		// Send username and password to API and receive a message from the HTTP Response Body and a cookie from the HTTP Response Header.
 		using var response = await ApiClient.PostAsJsonAsync("/users/login", _user);
 		string content = await response.Content.ReadAsStringAsync();
 
+		Authentication.GetAuthCookie(response);
+
 		_messageFromAbove = $"{content} ({response.StatusCode})";
+	}
+
+	private async Task SendGetPerson()
+	{
+		// Create an HTTP request and append a 'Cookie' header with the auth cookie as the value.
+		HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "person/get");
+
+		request.Headers.Add("Cookie", Authentication.AuthCookie);
+
+		using var response = await ApiClient.SendAsync(request);
+
+		if (response.IsSuccessStatusCode)
+		{
+			_person = await response.Content.ReadFromJsonAsync<PersonModel>();
+		}
+		else
+		{
+			_personMessage = await response.Content.ReadAsStringAsync();
+		}
 	}
 }
