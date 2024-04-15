@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var key = "super secret key!";
+var key = builder.Configuration["secretKey"] ?? throw new Exception("Key not found in user secrets!");
 
 builder.Services.AddScoped(sp => new JwtService(key, "http://localhost:5076"));
 builder.Services.AddScoped<JwtAuthenticator>();
