@@ -3,17 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAuth.API", "LearningAuth.API\LearningAuth.API.csproj", "{D40AFFD9-5DC6-45F8-8F48-2E84D065B645}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.API", "LearningAuth.API\LearningAuth.API.csproj", "{D40AFFD9-5DC6-45F8-8F48-2E84D065B645}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E35D81F5-782E-4C87-BD84-FFF0E333F768} = {E35D81F5-782E-4C87-BD84-FFF0E333F768}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAuth.Client", "LearningAuth.Client\LearningAuth.Client.csproj", "{8C2C9626-BF3F-4603-A8F1-A78B541EDA82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.Client", "LearningAuth.Client\LearningAuth.Client.csproj", "{8C2C9626-BF3F-4603-A8F1-A78B541EDA82}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E35D81F5-782E-4C87-BD84-FFF0E333F768} = {E35D81F5-782E-4C87-BD84-FFF0E333F768}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAuth.Models", "LearningAPI.Models\LearningAuth.Models.csproj", "{E35D81F5-782E-4C87-BD84-FFF0E333F768}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.Models", "LearningAPI.Models\LearningAuth.Models.csproj", "{E35D81F5-782E-4C87-BD84-FFF0E333F768}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.Tests", "LearningAuth.Tests\LearningAuth.Tests.csproj", "{EF8A5DE4-A7A6-4847-B758-A99404E6106F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyService", "KeyService\KeyService.csproj", "{CBEB6FED-B7D9-4656-AE72-4A652DC71A1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{E35D81F5-782E-4C87-BD84-FFF0E333F768}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E35D81F5-782E-4C87-BD84-FFF0E333F768}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E35D81F5-782E-4C87-BD84-FFF0E333F768}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF8A5DE4-A7A6-4847-B758-A99404E6106F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF8A5DE4-A7A6-4847-B758-A99404E6106F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF8A5DE4-A7A6-4847-B758-A99404E6106F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF8A5DE4-A7A6-4847-B758-A99404E6106F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBEB6FED-B7D9-4656-AE72-4A652DC71A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBEB6FED-B7D9-4656-AE72-4A652DC71A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBEB6FED-B7D9-4656-AE72-4A652DC71A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBEB6FED-B7D9-4656-AE72-4A652DC71A1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

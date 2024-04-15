@@ -1,0 +1,3 @@
+﻿using KeyService;
+
+KeyGen.GenerateKey();

@@ -1,5 +1,6 @@
 ﻿using LearningAuth.API.Authentication;
 using LearningAuth.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
@@ -7,27 +8,16 @@ using System.Security.Claims;
 
 namespace LearningAuth.API.Controllers;
 [ApiController]
-public class UserController : ControllerBase
+public class UserController(JwtAuthenticator auth) : ControllerBase
 {
-	private readonly AuthenticatorService _auth;
+	private readonly JwtAuthenticator _auth = auth;
 
-	public UserController(AuthenticatorService auth)
+	[HttpPost("/login")]
+	[AllowAnonymous]
+	public IActionResult Login(UserModel user)
 	{
-		_auth = auth;
-	}
+		var token = _auth.AuthenticateUser(user);
 
-	[HttpPost("/users/login")]
-	public IActionResult LoginAsync(UserModel user)
-	{
-		_auth.UserSignInCookie(user, HttpContext);
-
-		if (user.Username == "boss" && user.Password == "vito")
-		{
-			return Ok("Make them an offer they can't refuse!");
-		} 
-		else
-		{
-			return Ok("Revenge is a dish best served cold...");
-		}
+		return Ok(token);
 	}
 }

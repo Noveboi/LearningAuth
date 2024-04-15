@@ -18,17 +18,9 @@ public class PersonController : Controller
 	];
 
 	[HttpGet("person/get")]
-	public async Task<IActionResult> GetRandomPerson()
+	[Authorize(AuthenticationSchemes = "Jwt")]
+	public IActionResult GetRandomPerson()
 	{
-		var cookie = HttpContext.Request.Headers.Cookie.FirstOrDefault(c => c.StartsWith("auth="));
-
-		if (cookie == null)
-		{
-			return Unauthorized("Login first!");
-		}
-		else
-		{
-			return Ok(people[Random.Shared.Next(0, people.Length)]);
-		}
+		return Ok(people[Random.Shared.Next(0, people.Length)]);
 	}
 }

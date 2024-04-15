@@ -5,6 +5,7 @@ public class AuthService
 	private const string authCookiePrefix = "auth=";
 
 	public string? AuthCookie { get; private set; } 
+	public string? JwtToken { get; set; }
 
 	public void GetAuthCookie(HttpResponseMessage response)
 	{
