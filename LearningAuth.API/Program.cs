@@ -2,6 +2,7 @@ using LearningAuth.API.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text;
@@ -40,6 +41,25 @@ builder.Services.AddAuthentication("Jwt")
 	})
 	.AddJwtBearer("Jwt", jwtOptions => 
 	{
+		// Override the OnMessageReceived handler to manually set the JWT for the MessageReceivedContext.
+		// This is done because the MessageReceivedContext.Token is null if we do not assign it below. Thus, 
+		// the JwtBearerHandler will not be able to succesfully authenticate.
+		jwtOptions.Events = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents()
+		{
+			OnMessageReceived = ctx =>
+			{
+				var authorization = ctx.Request.Headers.Authorization;
+				if (authorization.Count != 0)
+				{
+					// Manually set the context token
+					var token = authorization.ToString()[6..].Trim().Replace("\"", null);
+					ctx.Token = token;
+				}
+
+				return Task.CompletedTask;
+			}
+		};
+
 		jwtOptions.TokenValidationParameters = new TokenValidationParameters()
 		{
 			ValidateIssuer = false,
