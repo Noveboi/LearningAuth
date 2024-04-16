@@ -1,6 +1,9 @@
 ﻿@page "/"
 @inject HttpClient HttpClient
 @inject AuthService Authentication
+@inject ILocalStorageService LocalStorage
+
+@using Blazored.LocalStorage
 @using System.ComponentModel.DataAnnotations
 @using System.Net
 @using System.Net.Http
@@ -34,7 +37,16 @@
 	string _messageFromAbove = string.Empty;
 	string _personMessage = string.Empty;
 
-	protected override void OnInitialized() => _user ??= new() { Email = "nove@nove.gr" };
+	protected override async Task OnInitializedAsync() 
+	{
+		_user ??= new() { Email = "nove@nove.gr" };
+
+		var jwtToken = await LocalStorage.GetItemAsStringAsync("jwtToken");
+		if (jwtToken != null)
+		{
+			Authentication.JwtToken = jwtToken;
+		}
+	}
 
 	// Invoked when user clicks "Login" button
 	async Task SubmitCredentials()
@@ -44,6 +56,8 @@
 		string content = await response.Content.ReadAsStringAsync();
 
 		Authentication.JwtToken = content;
+
+		await LocalStorage.SetItemAsStringAsync("jwtToken", content);
 
 		_messageFromAbove = $"{content} ({response.StatusCode})";
 	}

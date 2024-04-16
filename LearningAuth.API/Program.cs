@@ -66,8 +66,7 @@ builder.Services.AddAuthentication("Jwt")
 			ValidateAudience = false,
 			RequireAudience = false,
 			ValidateIssuerSigningKey = true,
-			IssuerSigningKey = new SymmetricSecurityKey(
-				SHA256.HashData(Encoding.UTF8.GetBytes(key)))
+			IssuerSigningKey = KeyService.CreateSymmetricKey(key)
 		};
 	});
 

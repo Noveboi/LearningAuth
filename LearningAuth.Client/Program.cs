@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Blazored.LocalStorage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -23,6 +24,10 @@ builder.Services.AddTransient(sp =>
 	return client;
 });
 
+
+// Add browser local storage for remembering the user login.
+// TODO: Add refresh token
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<AuthService>();
 
 await builder.Build().RunAsync();

@@ -17,8 +17,7 @@ public class JwtService(string key, string issuer)
 
 	public string CreateToken(ClaimsIdentity subject)
 	{
-		var sign = new SymmetricSecurityKey(
-			SHA256.HashData(Encoding.UTF8.GetBytes(_key)));
+		var sign = KeyService.CreateSymmetricKey(_key);
 
 		var handler = new JsonWebTokenHandler();
 		return handler.CreateToken(new SecurityTokenDescriptor()

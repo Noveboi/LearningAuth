@@ -16,7 +16,7 @@ public class UserController(JwtAuthenticator auth) : ControllerBase
 	[AllowAnonymous]
 	public IActionResult Login(UserModel user)
 	{
-		var token = _auth.AuthenticateUser(user);
+		var token = _auth.CreateUserAuthProfile(user);
 
 		return Ok(token);
 	}
