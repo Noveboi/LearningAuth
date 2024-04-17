@@ -57,7 +57,20 @@ builder.Services.AddAuthentication("Jwt")
 				}
 
 				return Task.CompletedTask;
-			}
+			},
+			OnAuthenticationFailed = ctx =>
+			{
+				// Check if authentication failed due to token expiring.
+				if (ctx.Exception is SecurityTokenExpiredException ex)
+				{
+					// Create a new token
+					var identity = ctx.Principal.Identity ?? throw new Exception("No no!");
+
+					// How to access JwtAuthenticator service in here?
+				}
+
+				return Task.CompletedTask;
+			},
 		};
 
 		jwtOptions.TokenValidationParameters = new TokenValidationParameters()

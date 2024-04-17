@@ -22,7 +22,7 @@ public class JwtService(string key, string issuer)
 		var handler = new JsonWebTokenHandler();
 		return handler.CreateToken(new SecurityTokenDescriptor()
 		{
-			Expires = DateTime.UtcNow.AddMinutes(10),
+			Expires = DateTime.UtcNow.AddSeconds(1),
 			Issuer = _issuer,
 			Subject = subject,
 			SigningCredentials = new SigningCredentials(sign, SecurityAlgorithms.HmacSha256)

@@ -15,8 +15,9 @@
 	<label>Password</label>
 	<InputText type="password" @bind-Value="_user.Password"/>
 	<InputText type="hidden" @bind-Value="_user.Email"/>
+	<label> Remember Me</label>
+	<InputCheckbox @bind-Value="_rememberUserAuth" />
 	<button type="submit">Login</button>
-	<br />
 	<DataAnnotationsValidator />
 	<ValidationSummary />
 </EditForm>
@@ -26,16 +27,18 @@
 <button @onclick="SendGetPerson">Get Person</button>
 @if (_person != null)
 {
-	<h1>@_person.FirstName @(_person.LastName), Age @_person.Age</h1>
+	<h1 style="@(_person.FirstName == "Maraki" && _person.LastName == "Dimitroulaki" ? "color: purple;" : "")">@_person.FirstName @(_person.LastName), Age @_person.Age</h1>
 }
 <br />
-<h1>@_personMessage</h1>
+<h1 >@_personMessage</h1>
 
 @code {
 	UserModel _user = default!;
 	PersonModel? _person;
 	string _messageFromAbove = string.Empty;
 	string _personMessage = string.Empty;
+
+	bool _rememberUserAuth = false;
 
 	protected override async Task OnInitializedAsync() 
 	{
@@ -57,7 +60,10 @@
 
 		Authentication.JwtToken = content;
 
-		await LocalStorage.SetItemAsStringAsync("jwtToken", content);
+		if (_rememberUserAuth)
+		{
+			await LocalStorage.SetItemAsStringAsync("jwtToken", content);
+		}
 
 		_messageFromAbove = $"{content} ({response.StatusCode})";
 	}

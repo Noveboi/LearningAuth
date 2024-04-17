@@ -9,7 +9,7 @@ public class JwtAuthenticator(JwtService jwtService)
 {
 	private readonly JwtService _jwtService = jwtService;
 
-	public string CreateUserAuthProfile(IUser user)
+	public string CreateUserToken(IUser user)
 	{
 		// Construct the Claims Principal and create the cookie.
 		var claims = new List<Claim>()
