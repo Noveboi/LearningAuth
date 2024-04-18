@@ -1,4 +1,4 @@
-﻿using LearningAuth.API.Authentication;
+using LearningAuth.API.Authentication;
 using LearningAuth.Models;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -81,6 +81,6 @@ public class JwtUnitTests
 		// Assert
 		Assert.NotNull(principalName);
 		Assert.Equal(principalName, username);
-
 	}
 }
+
