@@ -1,0 +1,34 @@
+﻿@inject LoginService LoginService
+
+<EditForm Model="_user" OnValidSubmit="SubmitCredentials" class="d-flex justify-content-center">
+	<div class="d-flex flex-column align-items-start">
+		<div class="form-field">
+			<label>Username</label>
+			<InputText @bind-Value="_user.Username" />
+		</div>
+		<div class="form-field">
+			<label>Password</label>
+			<InputText type="password" @bind-Value="_user.Password" />
+		</div>
+		<div class="remember-me">
+			<label> Remember Me</label>
+			<InputCheckbox @bind-Value="_rememberUser" />
+		</div>
+		<button type="submit" class="btn btn-primary align-self-center">Login</button>
+		<DataAnnotationsValidator />
+		<ValidationSummary />
+	</div>
+</EditForm>
+
+@code {
+	UserLoginModel _user = default!;
+	bool _rememberUser = false;
+
+	protected override async Task OnInitializedAsync() 
+	{
+		_user ??= new();
+		await LoginService.TryGetAuthToken();
+	}
+
+	async Task SubmitCredentials() => await LoginService.Login(_user, _rememberUser);
+}

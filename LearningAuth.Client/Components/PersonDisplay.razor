@@ -1,0 +1,26 @@
+﻿@inject PersonService PersonService
+
+@* 
+	This component uses the PersonService which interacts with API endpoints that require authorization. 
+*@
+
+<button @onclick="SendGetPerson" class="btn btn-primary">Get Person</button>
+@if (_person != null)
+{
+	<h1 style="@(_highlight ? "color: purple; font-weight: bold;" : "")">
+		@(_person.FirstName) @(_person.LastName), Age @(_person.Age)
+	</h1>
+}
+<h1 style="color: red; font-weight: bold;">@PersonService.ResultMessage</h1>
+
+@code {
+	PersonModel? _person;
+	bool _highlight = false;
+
+	async Task SendGetPerson()
+	{
+		_person = await PersonService.GetRandomPerson();
+
+		_highlight = _person != null && _person.FirstName == "Maraki" && _person.LastName == "Dimitroulaki";
+	}
+}

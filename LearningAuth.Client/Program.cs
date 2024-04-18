@@ -1,11 +1,11 @@
 using LearningAuth.Client;
-using LearningAuth.Client.Authentication;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Blazored.LocalStorage;
+using LearningAuth.Client.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -28,6 +28,8 @@ builder.Services.AddTransient(sp =>
 // Add browser local storage for remembering the user login.
 // TODO: Add refresh token
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ApiService>();
+builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<PersonService>();
 
 await builder.Build().RunAsync();

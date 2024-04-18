@@ -21,7 +21,8 @@ public class PersonController : Controller
 		new PersonModel() {FirstName = "Popy", LastName = "Franklin", Age = 2000},
 		new PersonModel() {FirstName = "Maraki", LastName = "Dimitroulaki", Age = 4},
 		new PersonModel() {FirstName = "George", LastName = "Farmer", Age = 3},
-		new PersonModel() {FirstName = "Milly", LastName = "Taylor", Age = 20}
+		new PersonModel() {FirstName = "Milly", LastName = "Taylor", Age = 20},
+		new PersonModel() {FirstName = "Giannis", LastName = "Ampatziouglou", Age = 32}
 	];
 
 	[HttpGet("person/get")]

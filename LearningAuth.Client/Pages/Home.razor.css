@@ -1,0 +1,17 @@
+﻿.form-field {
+    margin: 10px 0px;
+    display: grid;
+}
+
+.form-field > label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.remember-me {
+    margin: 20px 0px;
+}
+
+.remember-me > label {
+    margin-right: 5px;
+}

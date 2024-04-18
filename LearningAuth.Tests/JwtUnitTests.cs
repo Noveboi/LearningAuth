@@ -62,7 +62,7 @@ public class JwtUnitTests
 		var jwtService = new JwtService(secret, issuer);
 		var jwtAuthenticator = new JwtAuthenticator(jwtService);
 
-		var user = new UserModel()
+		var user = new UserLoginModel()
 		{
 			Username = username,
 			Password = password,

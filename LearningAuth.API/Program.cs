@@ -63,9 +63,7 @@ builder.Services.AddAuthentication("Jwt")
 				// Check if authentication failed due to token expiring.
 				if (ctx.Exception is SecurityTokenExpiredException ex)
 				{
-					// Create a new token
-					var identity = ctx.Principal.Identity ?? throw new Exception("No no!");
-
+					// TODO: Create a new token
 					// How to access JwtAuthenticator service in here?
 				}
 
