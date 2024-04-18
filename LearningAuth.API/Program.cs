@@ -73,14 +73,7 @@ builder.Services.AddAuthentication("Jwt")
 			},
 		};
 
-		jwtOptions.TokenValidationParameters = new TokenValidationParameters()
-		{
-			ValidateIssuer = false,
-			ValidateAudience = false,
-			RequireAudience = false,
-			ValidateIssuerSigningKey = true,
-			IssuerSigningKey = KeyService.CreateSymmetricKey(key)
-		};
+		jwtOptions.TokenValidationParameters = JwtValidation.CreateParameters(key);
 	});
 
 var app = builder.Build();
