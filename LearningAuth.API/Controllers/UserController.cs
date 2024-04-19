@@ -1,21 +1,29 @@
 ﻿using LearningAuth.API.Authentication;
+using LearningAuth.DataAccess.Repositories;
 using LearningAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace LearningAuth.API.Controllers;
 [ApiController]
-public class UserController(JwtAuthenticator auth) : ControllerBase
+public class UserController(JwtAuthenticator auth, IUserRepository<UserEntity> repository) : ControllerBase
 {
 	private readonly JwtAuthenticator _auth = auth;
+	private readonly IUserRepository<UserEntity> _repository = repository;
 
 	[HttpPost("/login")]
 	[AllowAnonymous]
-	public IActionResult Login(UserLoginModel user)
+	public async Task<IActionResult> Login(UserLoginModel user)
 	{
+		if (await _repository.Exists(user) == false)
+		{
+			return Unauthorized($"Wrong username or password, try again.");
+		}
+
 		var token = _auth.CreateUserToken(user);
 
 		return Ok(token);

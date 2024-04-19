@@ -2,14 +2,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LearningAuth.DataAccess.Repositories;
 
-public class InMemoryUserRepository : IRepository<UserEntity>, IUserUpdates
+public class InMemoryUserRepository : IUserRepository<UserEntity>
 {
-	private readonly List<UserEntity> _users = [];
+	// Retain users list for the entire application lifetime
+	// Fill repository with sample data
+	private static readonly List<UserEntity> _users =
+	[  
+		new() { Id = 1, FirstName = "George", LastName = "Nikolaidis", Username = "nove", Password = SampleHashPassword("superPassword!") },
+		new() { Id = 2, FirstName = "Alexandros", LastName = "Zountas", Username = "alexZu", Password = SampleHashPassword("sensei_123") },
+		new() { Id = 3, FirstName = "Kostas", LastName = "Papadopoulos", Username = "kopa7", Password = SampleHashPassword("abcdef12345") },
+		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmmarry", Password = SampleHashPassword("epicMary!") }
+	];
+
+	public Task<bool> Exists(IUserLoginModel user)
+	{
+		var foundUser = _users.FirstOrDefault(u => u.Username == user.Username && u.Password == SampleHashPassword(user.Password));
+		return Task.FromResult(user != null);
+	}
 
 	public Task Insert(IEnumerable<UserEntity> users)
 	{
@@ -92,5 +107,10 @@ public class InMemoryUserRepository : IRepository<UserEntity>, IUserUpdates
 
 		user.Username = newUsername;
 		return Task.CompletedTask;
+	}
+
+	private static byte[] SampleHashPassword(string passPlaintext)
+	{
+		return SHA256.HashData(Encoding.UTF8.GetBytes(passPlaintext));
 	}
 }
