@@ -14,15 +14,23 @@
 			<label> Remember Me</label>
 			<InputCheckbox @bind-Value="_rememberUser" />
 		</div>
-		<button type="submit" class="btn btn-primary align-self-center">Login</button>
+		<div class="loader @(_loaderStyle) align-self-center" />
+		<button type="submit" class="btn btn-primary align-self-center @(_loginButtonStyle)">Login</button>
 		<DataAnnotationsValidator />
 		<ValidationSummary />
 	</div>
 </EditForm>
+<h3 class="@(_confirmMessageStyle) align-self-center">@LoginService.LoginMessage</h3>
 
 @code {
 	UserLoginModel _user = default!;
+
+	const string displayNone = "set-display-none";
+
 	bool _rememberUser = false;
+	string _loginButtonStyle = string.Empty;
+	string _confirmMessageStyle = displayNone;
+	string _loaderStyle = displayNone;
 
 	protected override async Task OnInitializedAsync() 
 	{
@@ -30,5 +38,12 @@
 		await LoginService.TryGetAuthToken();
 	}
 
-	async Task SubmitCredentials() => await LoginService.Login(_user, _rememberUser);
+	async Task SubmitCredentials() 
+	{
+		_loginButtonStyle = displayNone;
+		_loaderStyle = string.Empty;
+		await LoginService.Login(_user, _rememberUser);
+		_loaderStyle = displayNone;
+		_confirmMessageStyle = string.Empty;
+	}
 }
