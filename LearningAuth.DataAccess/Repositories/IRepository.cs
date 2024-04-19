@@ -5,5 +5,5 @@ public interface IRepository<T>
 	Task Insert(IEnumerable<T> objects);
 	Task<IEnumerable<T>> Read();
 	Task<T?> ReadOne(int objectId);
-	Task Delete(T obj);
+	Task Delete(int objectId);
 }

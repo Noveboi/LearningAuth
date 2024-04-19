@@ -9,43 +9,88 @@ namespace LearningAuth.DataAccess.Repositories;
 
 public class InMemoryUserRepository : IRepository<UserEntity>, IUserUpdates
 {
-	public Task Delete(UserEntity obj)
-	{
-		throw new NotImplementedException();
-	}
+	private readonly List<UserEntity> _users = [];
 
-	public Task Insert(IEnumerable<UserEntity> objects)
+	public Task Insert(IEnumerable<UserEntity> users)
 	{
-		throw new NotImplementedException();
+		_users.AddRange(users);
+		return Task.CompletedTask;
 	}
 
 	public Task<IEnumerable<UserEntity>> Read()
 	{
-		throw new NotImplementedException();
+		return Task.FromResult((IEnumerable<UserEntity>)_users);
 	}
 
-	public Task<UserEntity?> ReadOne(int objectId)
+	public Task<UserEntity?> ReadOne(int userId)
 	{
-		throw new NotImplementedException();
+		return Task.FromResult(_users.FirstOrDefault(u => u.Id == userId));
 	}
+
+	public Task Delete(int userId)
+	{
+		var user = _users.FirstOrDefault(u => u.Id == userId);
+		
+		if (user == default)
+		{
+			return Task.CompletedTask;
+		}
+
+		_users.Remove(user);
+		return Task.CompletedTask;
+	}
+
 
 	public Task UpdateFirstName(int userId, string newFirstName)
 	{
-		throw new NotImplementedException();
+		var user = _users.FirstOrDefault(u => u.Id == userId);
+
+		if (user == default)
+		{
+			return Task.CompletedTask;
+		}
+
+		user.FirstName = newFirstName;
+		return Task.CompletedTask;
 	}
 
 	public Task UpdateLastName(int userId, string newLastName)
 	{
-		throw new NotImplementedException();
+		var user = _users.FirstOrDefault(u => u.Id == userId);
+
+		if (user == default)
+		{
+			return Task.CompletedTask;
+		}
+
+		user.LastName = newLastName;
+		return Task.CompletedTask;
 	}
 
 	public Task UpdatePassword(int userId, byte[] newPassword)
 	{
-		throw new NotImplementedException();
+		var user = _users.FirstOrDefault(u => u.Id == userId);
+
+		if (user == default)
+		{
+			return Task.CompletedTask;
+		}
+
+		user.Password = newPassword;
+		return Task.CompletedTask;
+
 	}
 
 	public Task UpdateUsername(int userId, string newUsername)
 	{
-		throw new NotImplementedException();
+		var user = _users.FirstOrDefault(u => u.Id == userId);
+
+		if (user == default)
+		{
+			return Task.CompletedTask;
+		}
+
+		user.Username = newUsername;
+		return Task.CompletedTask;
 	}
 }

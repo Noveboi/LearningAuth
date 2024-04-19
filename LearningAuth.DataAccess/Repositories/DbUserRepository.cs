@@ -27,7 +27,7 @@ namespace LearningAuth.DataAccess.Repositories
 			return await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
 		}
 
-		public async Task Delete(UserEntity obj)
+		public async Task Delete(int userId)
 		{
 			throw new NotImplementedException();
 		}
