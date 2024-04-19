@@ -2,8 +2,9 @@
 
 namespace LearningAuth.Models;
 
-public class UserLoginModel : IUser
+public class UserLoginModel : IUserLoginModel
 {
+
 	[Required]
 	public string Username { get; set; }
 	[Required]

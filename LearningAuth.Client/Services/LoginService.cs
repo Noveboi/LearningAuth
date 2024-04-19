@@ -20,9 +20,9 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 	/// </summary>
 	public string LoginMessage { get; private set; } = string.Empty;
 
-	// TODO: Return an IUser implementation
-	// TODO: Return an IUser implementation
-	// TODO: Return an IUser implementation
+	// TODO: Return an IUserLoginModel implementation
+	// TODO: Return an IUserLoginModel implementation
+	// TODO: Return an IUserLoginModel implementation
 	public async Task Login(UserLoginModel user, bool rememberUser)
 	{
 		using var response = await _apiService.PostAsync("/login", user);
