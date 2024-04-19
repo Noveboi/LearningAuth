@@ -18,5 +18,5 @@ public class UsersDbContext(string connectionString) : DbContext
 		optionsBuilder.UseSqlServer(_connString);
 	}
 
-	public DbSet<UserLoginModel> Users { get; set; }
+	public DbSet<UserEntity> Users { get; set; }
 }

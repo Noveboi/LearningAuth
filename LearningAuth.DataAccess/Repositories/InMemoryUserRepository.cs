@@ -5,34 +5,47 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LearningAuth.DataAccess.Repositories
+namespace LearningAuth.DataAccess.Repositories;
+
+public class InMemoryUserRepository : IRepository<UserEntity>, IUserUpdates
 {
-	public class InMemoryUserRepository(UsersDbContext dbContext) : IRepository<UserLoginModel>
+	public Task Delete(UserEntity obj)
 	{
-		private readonly UsersDbContext _dbContext = dbContext;
+		throw new NotImplementedException();
+	}
 
-		public void Insert(IEnumerable<UserLoginModel> objects)
-		{
-			throw new NotImplementedException();
-		}
+	public Task Insert(IEnumerable<UserEntity> objects)
+	{
+		throw new NotImplementedException();
+	}
 
-		public void Read()
-		{
-			throw new NotImplementedException();
-		}
+	public Task<IEnumerable<UserEntity>> Read()
+	{
+		throw new NotImplementedException();
+	}
 
-		public void ReadOne()
-		{
-			throw new NotImplementedException();
-		}
+	public Task<UserEntity?> ReadOne(int objectId)
+	{
+		throw new NotImplementedException();
+	}
 
-		public void Update(UserLoginModel oldObject, UserLoginModel newObject)
-		{
-			throw new NotImplementedException();
-		}
-		public void Delete(UserLoginModel obj)
-		{
-			throw new NotImplementedException();
-		}
+	public Task UpdateFirstName(int userId, string newFirstName)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task UpdateLastName(int userId, string newLastName)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task UpdatePassword(int userId, byte[] newPassword)
+	{
+		throw new NotImplementedException();
+	}
+
+	public Task UpdateUsername(int userId, string newUsername)
+	{
+		throw new NotImplementedException();
 	}
 }

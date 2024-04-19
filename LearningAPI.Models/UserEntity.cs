@@ -14,5 +14,6 @@ public class UserEntity : IUser
 	public string Username { get; set; }
 	public string FirstName { get; set; }
 	public string LastName { get; set; }
+	[DataType(DataType.Password)]
 	public byte[] Password { get; set; }
 }

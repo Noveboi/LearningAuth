@@ -2,9 +2,8 @@
 
 public interface IRepository<T>
 {
-	void Insert(IEnumerable<T> objects);
-	void Read();
-	void ReadOne();
-	void Update(T oldObject, T newObject);
-	void Delete(T obj);
+	Task Insert(IEnumerable<T> objects);
+	Task<IEnumerable<T>> Read();
+	Task<T?> ReadOne(int objectId);
+	Task Delete(T obj);
 }
