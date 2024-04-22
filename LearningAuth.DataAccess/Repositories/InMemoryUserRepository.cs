@@ -17,17 +17,17 @@ public class InMemoryUserRepository : IUserRepository<UserEntity>
 	// Fill repository with sample data
 	private static readonly List<UserEntity> _users =
 	[  
-		new() { Id = 1, FirstName = "George", LastName = "Nikolaidis", Username = "nove", Password = SampleHashPassword("superPassword!") },
-		new() { Id = 2, FirstName = "Alexandros", LastName = "Zountas", Username = "alexZu", Password = SampleHashPassword("sensei_123") },
-		new() { Id = 3, FirstName = "Kostas", LastName = "Papadopoulos", Username = "kopa7", Password = SampleHashPassword("abcdef12345") },
-		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmmarry", Password = SampleHashPassword("epicMary!") }
+		new() { Id = 1, FirstName = "George", LastName = "Nikolaidis", Username = "nove", Password = Hasher.Hash("superPassword!") },
+		new() { Id = 2, FirstName = "Alexandros", LastName = "Zountas", Username = "alexZu", Password = Hasher.Hash("sensei_123") },
+		new() { Id = 3, FirstName = "Kostas", LastName = "Papadopoulos", Username = "kopa7", Password = Hasher.Hash("abcdef12345") },
+		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmmarry", Password = Hasher.Hash("epicMary!") }
 	];
 
 	public Task<UserEntity?> Find(IUserLoginModel user)
 	{
 		var foundUser = _users.FirstOrDefault(u => 
 		{
-			return u.Username == user.Username && Enumerable.SequenceEqual(u.Password, SampleHashPassword(user.Password));
+			return u.Username == user.Username && Enumerable.SequenceEqual(u.Password, Hasher.Hash(user.Password));
 		});
 
 		return Task.FromResult(foundUser);
@@ -114,10 +114,5 @@ public class InMemoryUserRepository : IUserRepository<UserEntity>
 
 		user.Username = newUsername;
 		return Task.CompletedTask;
-	}
-
-	private static byte[] SampleHashPassword(string passPlaintext)
-	{
-		return SHA256.HashData(Encoding.UTF8.GetBytes(passPlaintext));
 	}
 }

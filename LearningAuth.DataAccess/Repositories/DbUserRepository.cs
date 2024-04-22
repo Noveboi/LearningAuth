@@ -12,13 +12,19 @@ namespace LearningAuth.DataAccess.Repositories;
 /// Contains a <see cref="UsersDbContext"/> dependency that interacts with an SQL Server database instance using EF Core.
 /// </summary>
 /// <param name="dbContext"></param>
-public class DbUserRepository(UsersDbContext dbContext) : IRepository<UserEntity>, IUserUpdates
+public class DbUserRepository(UsersDbContext dbContext) : IUserRepository<UserEntity>
 {
 	private readonly UsersDbContext _dbContext = dbContext;
+
+	public async Task<UserEntity?> Find(IUserLoginModel user)
+	{
+
+	}
 
 	public async Task Insert(IEnumerable<UserEntity> objects)
 	{
 		await _dbContext.Users.AddRangeAsync(objects);
+		await _dbContext.SaveChangesAsync();
 	}
 
 	public async Task<IEnumerable<UserEntity>> Read()
@@ -33,12 +39,17 @@ public class DbUserRepository(UsersDbContext dbContext) : IRepository<UserEntity
 
 	public async Task Delete(int userId)
 	{
-		throw new NotImplementedException();
+		UserEntity? foundUser = await ReadOne(userId);
+		if (foundUser != null)
+		{
+			_dbContext.Users.Remove(foundUser);
+			await _dbContext.SaveChangesAsync();
+		}
 	}
 
 	public async Task UpdateFirstName(int userId, string newFirstName)
 	{
-		throw new NotImplementedException();
+		await _dbContext.Users.Exw
 	}
 
 	public async Task UpdateLastName(int userId, string newLastName)
