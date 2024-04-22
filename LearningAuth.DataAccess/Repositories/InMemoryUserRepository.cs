@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace LearningAuth.DataAccess.Repositories;
 
+/// <summary>
+/// Retains an in-memory array of user objects and implements all necessary CRUD methods.
+/// </summary>
 public class InMemoryUserRepository : IUserRepository<UserEntity>
 {
 	// Retain users list for the entire application lifetime

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace LearningAuth.DataAccess.Repositories;
 
+/// <summary>
+/// Defines the necessary update operations for a repository that has objects that are a subclass of IUser.
+/// </summary>
 public interface IUserUpdates
 {
     Task UpdateFirstName(int userId, string newFirstName);
