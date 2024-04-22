@@ -19,13 +19,16 @@ public class UserController(JwtAuthenticator auth, IUserRepository<UserEntity> r
 	[AllowAnonymous]
 	public async Task<IActionResult> Login(UserLoginModel user)
 	{
-		if (await _repository.Exists(user) == false)
+		IUser? foundUser = await _repository.Find(user);
+
+		if (foundUser == null)
 		{
 			return Unauthorized($"Wrong username or password, try again.");
 		}
 
 		var token = _auth.CreateUserToken(user);
+		IUserWithToken userObjectWithToken = new UserWithToken(foundUser, token);
 
-		return Ok(token);
+		return Ok(userObjectWithToken);
 	}
 }

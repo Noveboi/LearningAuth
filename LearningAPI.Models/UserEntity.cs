@@ -9,6 +9,16 @@ namespace LearningAuth.Models;
 
 public class UserEntity : IUser
 {
+	public UserEntity() { }
+	public UserEntity(IUser user)
+	{
+		Id = user.Id;
+		Username = user.Username;
+		FirstName = user.FirstName;
+		LastName = user.LastName;
+		Password = user.Password;
+	}
+
 	[Key]
 	public int Id { get; set; }
 	public string Username { get; set; }

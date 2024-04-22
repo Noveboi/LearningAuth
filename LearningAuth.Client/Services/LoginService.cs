@@ -20,29 +20,36 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 	/// </summary>
 	public string LoginMessage { get; private set; } = string.Empty;
 
-	// TODO: Return an IUserLoginModel implementation
-	// TODO: Return an IUserLoginModel implementation
-	// TODO: Return an IUserLoginModel implementation
+	// TODO: Return an IUser implementation
+	// TODO: Return an IUser implementation
+	// TODO: Return an IUser implementation
 	public async Task Login(UserLoginModel user, bool rememberUser)
 	{
 		using var response = await _apiService.PostAsync("/login", user);
 
-		// If the operation was succesful, the JWT token is returned.
+		// If the operation was succesful, the user info along with the JWT Token are returned.
 		// Else, an error message is returned.
-		string content = await response.Content.ReadAsStringAsync();
 
 		if (response.IsSuccessStatusCode)
 		{
-			if (rememberUser)
+			IUserWithToken? userWithToken = await response.Content.ReadFromJsonAsync<UserWithToken>();
+
+			if (userWithToken == null)
 			{
-				await _localStorage.SetItemAsStringAsync(_jwtKey, content);
+				throw new Exception("Something went wrong, deserialized into a NULL IUserWithToken object.");
 			}
 
-			LoginMessage = $"Succesfully logged in as \"{user.Username}\"";
-			_apiService.SetAuthToken(content);
+			if (rememberUser)
+			{
+				await _localStorage.SetItemAsStringAsync(_jwtKey, userWithToken.Token);
+			}
+
+			LoginMessage = $"Welcome {userWithToken.FirstName} {userWithToken.LastName}!";
+			_apiService.SetAuthToken(userWithToken.Token);
 		}
 		else
 		{
+			string content = await response.Content.ReadAsStringAsync();
 			LoginMessage = content;
 		}
 	}

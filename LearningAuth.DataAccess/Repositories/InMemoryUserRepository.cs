@@ -23,14 +23,14 @@ public class InMemoryUserRepository : IUserRepository<UserEntity>
 		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmmarry", Password = SampleHashPassword("epicMary!") }
 	];
 
-	public Task<bool> Exists(IUserLoginModel user)
+	public Task<UserEntity?> Find(IUserLoginModel user)
 	{
-		
 		var foundUser = _users.FirstOrDefault(u => 
 		{
 			return u.Username == user.Username && Enumerable.SequenceEqual(u.Password, SampleHashPassword(user.Password));
 		});
-		return Task.FromResult(foundUser != null);
+
+		return Task.FromResult(foundUser);
 	}
 
 	public Task Insert(IEnumerable<UserEntity> users)
