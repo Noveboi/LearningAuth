@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using LearningAuth.Models;
+
 
 namespace LearningAuth.Models;
 
-public class UserLoginModel : IUserLoginModel
+public class UserLoginModel : IBasicUser, IPasswordVisible
 {
 
 	[Required]

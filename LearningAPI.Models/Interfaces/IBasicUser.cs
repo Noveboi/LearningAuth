@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 namespace LearningAuth.Models;
 
 /// <summary>
-/// Defines what properties/attributes a user entity should have
+/// Defines the most basic properties that a user must have
 /// </summary>
-public interface IUser
-{	
-	int Id { get; set; }
+public interface IBasicUser
+{
 	string Username { get; set; }
-	string FirstName { get; set; }
-	string LastName { get; set; }
-	byte[] Password { get; set; }
 }

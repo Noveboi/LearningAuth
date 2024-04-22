@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using LearningAuth.Models;
+
 using System.Net.Http.Json;
 
 namespace LearningAuth.Client.Services;
@@ -20,7 +21,7 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 	/// </summary>
 	public string LoginMessage { get; private set; } = string.Empty;
 
-	public async Task<IUser?> LoginAsync(UserLoginModel user, bool rememberUser)
+	public async Task<DisplayUser?> LoginAsync(UserLoginModel user, bool rememberUser)
 	{
 		using var response = await _apiService.PostAsync("/login", user);
 
@@ -41,12 +42,15 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 				await _localStorage.SetItemAsStringAsync(_jwtKey, userWithToken.Token);
 			}
 
-			IUser userInfo = userWithToken.User;
-
-			LoginMessage = $"Welcome {userInfo.FirstName} {userInfo.LastName}!";
+			LoginMessage = $"Welcome {userWithToken.FirstName} {userWithToken.LastName}!";
 			_apiService.SetAuthToken(userWithToken.Token);
 
-			return userInfo;
+			return new DisplayUser()
+			{
+				FirstName = userWithToken.FirstName,
+				LastName = userWithToken.LastName,
+				Username = userWithToken.Username
+			};
 		}
 		else
 		{

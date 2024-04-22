@@ -2,6 +2,7 @@
 using LearningAuth.API.Services;
 using LearningAuth.DataAccess.Repositories;
 using LearningAuth.Models;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.DataProtection;
@@ -20,7 +21,7 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 	[AllowAnonymous]
 	public async Task<IActionResult> Login(UserLoginModel user)
 	{
-		UserEntity? foundUser = await _userService.Find(user);
+		var foundUser = await _userService.Find(user);
 
 		if (foundUser == null)
 		{
@@ -28,8 +29,15 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 		}
 
 		var token = _auth.CreateUserToken(user);
-		IUserWithToken userObjectWithToken = new UserWithToken(foundUser, token);
+		IUserWithToken userObjectWithToken = new UserWithToken((UserEntity)foundUser, token);
 
 		return Ok(userObjectWithToken);
+	}
+
+	[HttpPost("/register")]
+	[AllowAnonymous]
+	public async Task<IActionResult> Register(UserRegisterModel user)
+	{
+		return Ok("Nice!");
 	}
 }

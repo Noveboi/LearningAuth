@@ -1,4 +1,15 @@
 ﻿@page "/"
 
-<LoginForm />
-<PersonDisplay />
+@if (_loginFormVisible)
+{
+	<LoginForm OnRequestRegisterForm="() => _loginFormVisible = false"/>
+	<PersonDisplay />
+}
+else
+{
+	<RegisterForm OnRequestLoginForm="() => _loginFormVisible = true" />
+}
+
+@code {
+	bool _loginFormVisible = true;
+}

@@ -6,22 +6,28 @@
 
 <div class="d-flex flex-column align-items-center m-4 p-2">
 	<button @onclick="SendGetPerson" class="btn btn-primary">Get Person</button>
-	@if (_person != null)
+	@if (_receivedPerson != null)
 	{
 		<h1 style="@(_highlight ? "color: purple; font-weight: bold;" : "")">
-			@(_person.FirstName) @(_person.LastName), Age @(_person.Age)
+			@(_receivedPerson.FirstName) @(_receivedPerson.LastName), Age @(_receivedPerson.Age)
 		</h1>
 	}
 	<h1 style="color: red; font-weight: bold;">@PersonService.ResultMessage</h1>
 </div>
 @code {
-	PersonModel? _person;
+	PersonModel? _receivedPerson;
+	PersonModel _personFormModel = default!;
 	bool _highlight = false;
+
+	protected override void OnInitialized()
+	{
+		_personFormModel ??= new();
+	}
 
 	async Task SendGetPerson()
 	{
-		_person = await PersonService.GetRandomPersonAsync();
+		_receivedPerson = await PersonService.GetRandomPersonAsync();
 
-		_highlight = _person != null && _person.FirstName == "Maraki" && _person.LastName == "Dimitroulaki";
+		_highlight = _receivedPerson != null && _receivedPerson.FirstName == "Maraki" && _receivedPerson.LastName == "Dimitroulaki";
 	}
 }

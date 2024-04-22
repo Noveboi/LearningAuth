@@ -3,15 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LearningAuth.DataAccess;
 
-public class UsersDbContext(string connectionString) : DbContext
+public class UsersDbContext(DbContextOptions<UsersDbContext> options) : DbContext(options)
 {
-	// SQL Server connection string
-	private readonly string _connString = connectionString;
-
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
-		optionsBuilder.UseSqlServer(_connString);
-	}
-
 	public DbSet<UserEntity> Users { get; set; }
 }

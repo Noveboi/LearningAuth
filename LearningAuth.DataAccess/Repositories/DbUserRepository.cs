@@ -12,58 +12,111 @@ namespace LearningAuth.DataAccess.Repositories;
 /// Contains a <see cref="UsersDbContext"/> dependency that interacts with an SQL Server database instance using EF Core.
 /// </summary>
 /// <param name="dbContext"></param>
-public class DbUserRepository(UsersDbContext dbContext) : IUserRepository<UserEntity>
+public class DbUserRepository(UsersDbContext dbContext) : IUserRepository<IUser>
 {
 	private readonly UsersDbContext _dbContext = dbContext;
 
-	public async Task<UserEntity?> Find(IUserLoginModel user)
+	public async Task<IUserEntity?> Find(string username, string password)
 	{
-
+		return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == Hasher.Hash(password));
 	}
 
-	public async Task Insert(IEnumerable<UserEntity> objects)
+	public async Task Insert(IUser user)
 	{
-		await _dbContext.Users.AddRangeAsync(objects);
+		await _dbContext.AddAsync(new UserEntity(user)
+		{
+			// Let DB handle ID auto-increment
+			PasswordHash = Hasher.Hash(user.Password)
+		});
+
 		await _dbContext.SaveChangesAsync();
 	}
 
-	public async Task<IEnumerable<UserEntity>> Read()
+	public async Task InsertRange(IEnumerable<IUser> users)
 	{
-		return await _dbContext.Users.ToListAsync();
+		foreach (var user in users)
+		{
+			await _dbContext.AddAsync(new UserEntity(user)
+			{
+				// Let DB handle ID auto-increment
+				PasswordHash = Hasher.Hash(user.Password)
+			});
+		}
+		await _dbContext.SaveChangesAsync();
 	}
 
-	public async Task<UserEntity?> ReadOne(int id)
+	public async Task<IEnumerable<IUser>> Read()
 	{
-		return await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
+		return await _dbContext.Users.Cast<IUser>().ToListAsync();
 	}
 
-	public async Task Delete(int userId)
+	public async Task<IUser?> ReadOne(int userId)
 	{
-		UserEntity? foundUser = await ReadOne(userId);
+		return (IUser?)await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
+	}
+
+	public async Task<bool> Delete(int userId)
+	{
+		UserEntity? foundUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
 		if (foundUser != null)
 		{
 			_dbContext.Users.Remove(foundUser);
 			await _dbContext.SaveChangesAsync();
+			return true;
 		}
+
+		return false;
 	}
 
-	public async Task UpdateFirstName(int userId, string newFirstName)
+	public async Task<bool> UpdateFirstName(int userId, string newFirstName)
 	{
-		await _dbContext.Users.Exw
+		UserEntity? foundUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
+		if (foundUser != null)
+		{
+			foundUser.FirstName = newFirstName;
+			await _dbContext.SaveChangesAsync();
+			return true;
+		}
+
+		return false;
 	}
 
-	public async Task UpdateLastName(int userId, string newLastName)
+	public async Task<bool> UpdateLastName(int userId, string newLastName)
 	{
-		throw new NotImplementedException();
+		UserEntity? foundUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
+		if (foundUser != null)
+		{
+			foundUser.LastName = newLastName;
+			await _dbContext.SaveChangesAsync();
+			return true;
+		}
+
+		return false;
 	}
 
-	public async Task UpdateUsername(int userId, string newUsername)
+	public async Task<bool> UpdateUsername(int userId, string newUsername)
 	{
-		throw new NotImplementedException();
+		UserEntity? foundUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
+		if (foundUser != null)
+		{
+			foundUser.Username = newUsername;
+			await _dbContext.SaveChangesAsync();
+			return true;
+		}
+
+		return false;
 	}
 
-	public async Task UpdatePassword(int userId, byte[] newPassword)
+	public async Task<bool> UpdatePassword(int userId, string newPassword)
 	{
-		throw new NotImplementedException();
+		UserEntity? foundUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
+		if (foundUser != null)
+		{
+			foundUser.PasswordHash = Hasher.Hash(newPassword);
+			await _dbContext.SaveChangesAsync();
+			return true;
+		}
+
+		return false;
 	}
 }

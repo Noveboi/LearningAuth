@@ -1,7 +1,10 @@
 ﻿@inject LoginService LoginService
 
-<EditForm Model="_userModel" OnValidSubmit="SubmitCredentials" class="d-flex justify-content-center">
+<EditForm Model="_userModel" OnValidSubmit="SubmitCredentials" class="d-flex flex-column align-items-center">
+	<h1 class="mb-3 text-center">Login</h1>
 	<div class="d-flex flex-column align-items-start">
+		<DataAnnotationsValidator />
+		<ValidationSummary />
 		<div class="form-field">
 			<label>Username</label>
 			<InputText @bind-Value="_userModel.Username" />
@@ -11,20 +14,21 @@
 			<InputText type="password" @bind-Value="_userModel.Password" />
 		</div>
 		<div class="remember-me">
-			<label> Remember Me</label>
+			<label><strong>Remember Me</strong></label>
 			<InputCheckbox @bind-Value="_rememberUser" />
 		</div>
 		<div class="loader @(_loaderStyle) align-self-center" />
 		<button type="submit" class="btn btn-primary align-self-center @(_loginButtonStyle)">Login</button>
-		<DataAnnotationsValidator />
-		<ValidationSummary />
+		<p>Don't have an account? <span class="switch-form-text" @onclick="SwitchForm">Register</span></p>
 	</div>
 </EditForm>
 <h3 class="@(_confirmMessageStyle) text-align-center">@LoginService.LoginMessage</h3>
 
 @code {
 	[Parameter]
-	public EventCallback<IUser> OnSuccessfulLogin { get; set; }
+	public EventCallback<DisplayUser> OnSuccessfulLogin { get; set; }
+	[Parameter]
+	public EventCallback OnRequestRegisterForm { get; set; }
 
 	UserLoginModel _userModel = default!;
 
@@ -47,7 +51,7 @@
 	{
 		_loaderStyle = string.Empty;
 
-		IUser? user = await LoginService.LoginAsync(_userModel, _rememberUser);
+		DisplayUser? user = await LoginService.LoginAsync(_userModel, _rememberUser);
 		await OnSuccessfulLogin.InvokeAsync(user);
 
 		if (user != null)
@@ -58,4 +62,6 @@
 		_loaderStyle = displayNone;
 		_confirmMessageStyle = string.Empty;
 	}
+
+	async Task SwitchForm() => await OnRequestRegisterForm.InvokeAsync();
 }

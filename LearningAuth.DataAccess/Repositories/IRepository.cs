@@ -6,8 +6,9 @@
 /// <typeparam name="T">The type of object stored in the repository</typeparam>
 public interface IRepository<T>
 {
-	Task Insert(IEnumerable<T> objects);
+	Task Insert(T obj);
+	Task InsertRange(IEnumerable<T> objects);
 	Task<IEnumerable<T>> Read();
 	Task<T?> ReadOne(int objectId);
-	Task Delete(int objectId);
+	Task<bool> Delete(int objectId);
 }

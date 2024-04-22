@@ -11,108 +11,126 @@ namespace LearningAuth.DataAccess.Repositories;
 /// <summary>
 /// Retains an in-memory array of user objects and implements all necessary CRUD methods.
 /// </summary>
-public class InMemoryUserRepository : IUserRepository<UserEntity>
+public class InMemoryUserRepository : IUserRepository<IUser>
 {
 	// Retain users list for the entire application lifetime
 	// Fill repository with sample data
 	private static readonly List<UserEntity> _users =
 	[  
-		new() { Id = 1, FirstName = "George", LastName = "Nikolaidis", Username = "nove", Password = Hasher.Hash("superPassword!") },
-		new() { Id = 2, FirstName = "Alexandros", LastName = "Zountas", Username = "alexZu", Password = Hasher.Hash("sensei_123") },
-		new() { Id = 3, FirstName = "Kostas", LastName = "Papadopoulos", Username = "kopa7", Password = Hasher.Hash("abcdef12345") },
-		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmmarry", Password = Hasher.Hash("epicMary!") }
+		new() { Id = 1, FirstName = "George", LastName = "Nikolaidis", Username = "nove", PasswordHash = Hasher.Hash("superPassword!") },
+		new() { Id = 2, FirstName = "Alexandros", LastName = "Zountas", Username = "alexZu", PasswordHash = Hasher.Hash("sensei_123") },
+		new() { Id = 3, FirstName = "Kostas", LastName = "Papadopoulos", Username = "kopa7", PasswordHash = Hasher.Hash("abcdef12345") },
+		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmmarry", PasswordHash = Hasher.Hash("epicMary!") }
 	];
 
-	public Task<UserEntity?> Find(IUserLoginModel user)
+	private static int _currentId = 4;
+
+	public Task<IUserEntity?> Find(string username, string plainPassword)
 	{
-		var foundUser = _users.FirstOrDefault(u => 
+		var foundUser = (IUserEntity?)_users.FirstOrDefault(u => 
 		{
-			return u.Username == user.Username && Enumerable.SequenceEqual(u.Password, Hasher.Hash(user.Password));
+			return u.Username == username && Enumerable.SequenceEqual(u.PasswordHash, Hasher.Hash(plainPassword));
 		});
 
 		return Task.FromResult(foundUser);
 	}
 
-	public Task Insert(IEnumerable<UserEntity> users)
+	public Task Insert(IUser user)
 	{
-		_users.AddRange(users);
+		_currentId++;
+		_users.Add(new UserEntity(user)
+		{
+			Id = _currentId,
+			PasswordHash = Hasher.Hash(user.Password)
+		});
+
 		return Task.CompletedTask;
 	}
 
-	public Task<IEnumerable<UserEntity>> Read()
+	public Task InsertRange(IEnumerable<IUser> users)
 	{
-		return Task.FromResult((IEnumerable<UserEntity>)_users);
+		foreach (var user in users)
+		{
+			Insert(user);
+		}
+
+		return Task.CompletedTask;
 	}
 
-	public Task<UserEntity?> ReadOne(int userId)
+	public Task<IEnumerable<IUser>> Read()
 	{
-		return Task.FromResult(_users.FirstOrDefault(u => u.Id == userId));
+		return Task.FromResult((IEnumerable<IUser>)_users);
 	}
 
-	public Task Delete(int userId)
+	public Task<IUser?> ReadOne(int userId)
+	{
+		return Task.FromResult((IUser?)_users.FirstOrDefault(u => u.Id == userId));
+	}
+
+	public Task<bool> Delete(int userId)
 	{
 		var user = _users.FirstOrDefault(u => u.Id == userId);
 		
-		if (user == default)
+		if (user != null)
 		{
-			return Task.CompletedTask;
+			_currentId--;
+			_users.Remove(user);
+			return Task.FromResult(true);
 		}
 
-		_users.Remove(user);
-		return Task.CompletedTask;
+		return Task.FromResult(false);
 	}
 
 
-	public Task UpdateFirstName(int userId, string newFirstName)
+	public Task<bool> UpdateFirstName(int userId, string newFirstName)
 	{
 		var user = _users.FirstOrDefault(u => u.Id == userId);
 
-		if (user == default)
+		if (user != null)
 		{
-			return Task.CompletedTask;
+			user.FirstName = newFirstName;
+			return Task.FromResult(true);
 		}
 
-		user.FirstName = newFirstName;
-		return Task.CompletedTask;
+		return Task.FromResult(false);
 	}
 
-	public Task UpdateLastName(int userId, string newLastName)
+	public Task<bool> UpdateLastName(int userId, string newLastName)
 	{
 		var user = _users.FirstOrDefault(u => u.Id == userId);
 
-		if (user == default)
+		if (user != null)
 		{
-			return Task.CompletedTask;
+			user.LastName = newLastName;
+			return Task.FromResult(true);
 		}
 
-		user.LastName = newLastName;
-		return Task.CompletedTask;
+		return Task.FromResult(false);
 	}
 
-	public Task UpdatePassword(int userId, byte[] newPassword)
+	public Task<bool> UpdatePassword(int userId, string newPassword)
 	{
 		var user = _users.FirstOrDefault(u => u.Id == userId);
 
-		if (user == default)
+		if (user != null)
 		{
-			return Task.CompletedTask;
+			user.PasswordHash = Hasher.Hash(newPassword);
+			return Task.FromResult(true);
 		}
 
-		user.Password = newPassword;
-		return Task.CompletedTask;
-
+		return Task.FromResult(false);
 	}
 
-	public Task UpdateUsername(int userId, string newUsername)
+	public Task<bool> UpdateUsername(int userId, string newUsername)
 	{
 		var user = _users.FirstOrDefault(u => u.Id == userId);
 
-		if (user == default)
+		if (user != null)
 		{
-			return Task.CompletedTask;
+			user.Username = newUsername;
+			return Task.FromResult(true);
 		}
 
-		user.Username = newUsername;
-		return Task.CompletedTask;
+		return Task.FromResult(false);
 	}
 }

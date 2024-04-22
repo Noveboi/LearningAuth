@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace LearningAuth.DataAccess.Repositories;
 
 /// <summary>
-/// Defines the necessary update operations for a repository that has objects that are a subclass of IUser.
+/// Defines the necessary update operations for a repository that has objects that are a subclass of IUserEntity.
 /// </summary>
 public interface IUserUpdates
 {
-    Task UpdateFirstName(int userId, string newFirstName);
-	Task UpdateLastName(int userId, string newLastName);
-	Task UpdateUsername(int userId, string newUsername);
-	Task UpdatePassword(int userId, byte[] newPassword);
+    Task<bool> UpdateFirstName(int userId, string newFirstName);
+	Task<bool> UpdateLastName(int userId, string newLastName);
+	Task<bool> UpdateUsername(int userId, string newUsername);
+	Task<bool> UpdatePassword(int userId, string newPassword);
 }

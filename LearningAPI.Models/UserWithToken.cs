@@ -9,12 +9,22 @@ namespace LearningAuth.Models;
 
 public class UserWithToken : IUserWithToken
 {
-	public UserWithToken(UserEntity user, string token)
+	[JsonConstructor]
+	private UserWithToken() { }
+	public UserWithToken(IUserEntity user, string token)
 	{
-		User = user;
+		Id = user.Id;
+		Username = user.Username;
+		FirstName = user.FirstName;
+		LastName = user.LastName;
+		PasswordHash = user.PasswordHash;
 		Token = token;
 	}
 
-	public UserEntity User { get; set; }
 	public string Token { get; set; }
+	public int Id { get; set; }
+	public string Username { get; set; }
+	public string FirstName { get; set; }
+	public string LastName { get; set; }
+	public byte[] PasswordHash { get; set; }
 }

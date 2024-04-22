@@ -5,26 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using LearningAuth.Models;
+
 
 namespace LearningAuth.Models;
 
-public class UserEntity : IUser
-{
+public class UserEntity : IUserEntity
+{ 
 	public UserEntity() { }
 	public UserEntity(IUser user)
 	{
-		Id = user.Id;
 		Username = user.Username;
 		FirstName = user.FirstName;
 		LastName = user.LastName;
-		Password = user.Password;
 	}
 
 	[Key]
 	public int Id { get; set; }
+	[MaxLength(20)]
 	public string Username { get; set; }
+	[MaxLength(50)]
 	public string FirstName { get; set; }
+	[MaxLength(50)]
 	public string LastName { get; set; }
 	[DataType(DataType.Password)]
-	public byte[] Password { get; set; }
+	public byte[] PasswordHash { get; set; }
 }

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace LearningAuth.Models;
 
 /// <summary>
-/// Used for transferring data between API and client when logging in.
+/// Defines the details that a user object can optionally have.
 /// </summary>
-public interface IUserWithToken 
+public interface IUserDetails
 {
-	UserEntity User { get; set; }
-	string Token { get; set; }
+	string FirstName { get; set; }
+	string LastName { get; set; }
 }

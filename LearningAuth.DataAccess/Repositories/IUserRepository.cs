@@ -10,8 +10,11 @@ namespace LearningAuth.DataAccess.Repositories;
 /// <summary>
 /// Extends the <see cref="IRepository{T}"/> pattern to include any essential login/register functionalities 
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public interface IUserRepository<T> : IRepository<T>, IUserUpdates where T : IUser
+/// <typeparam name="THashedPass">Used for interacting with <see cref="IUserEntity"/> implementations that have an ID and a hashed password</typeparam>
+/// <typeparam name="TVisiblePass">Used for CRUD operations with <see cref="IRepository{T}"/>.</typeparam>
+public interface IUserRepository<TVisiblePass> 
+	: IRepository<TVisiblePass>, IUserUpdates 
+	where TVisiblePass : IUser
 {
-	Task<T?> Find(IUserLoginModel user);
+	Task<IUserEntity?> Find(string username, string password);
 }

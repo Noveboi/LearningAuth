@@ -66,7 +66,6 @@ public class JwtUnitTests
 		{
 			Username = username,
 			Password = password,
-			Email = email
 		};
 
 		var tvp = JwtValidation.CreateParameters(secret);

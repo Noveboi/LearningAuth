@@ -1,4 +1,5 @@
-﻿using LearningAuth.Models;
+﻿
+using LearningAuth.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -9,7 +10,7 @@ public class JwtAuthenticator(JwtService jwtService)
 {
 	private readonly JwtService _jwtService = jwtService;
 
-	public string CreateUserToken(IUserLoginModel user)
+	public string CreateUserToken(IBasicUser user)
 	{
 		// Construct the Claims Principal and create the cookie.
 		var claims = new List<Claim>()

@@ -1,0 +1,48 @@
+@inject RegisterService RegisterService
+
+<EditForm Model="user" OnValidSubmit="Register" class="d-flex flex-column align-items-center">
+	<h1 class="mb-3 text-center">Register</h1>
+	<div class="d-flex flex-column align-items-start">
+		<DataAnnotationsValidator />
+		<ValidationSummary/>
+		<div class="form-field">
+			<label>First Name</label>
+			<InputText @bind-Value="user.FirstName" />
+		</div>
+		<div class="form-field">
+			<label>Last Name</label>
+			<InputText @bind-Value="user.LastName" />
+		</div>
+		<div class="form-field">
+			<label>Username</label>
+			<InputText @bind-Value="user.Username" />
+		</div>
+		<div class="form-field">
+			<label>Password</label>
+			<InputText type="password" @bind-Value="user.Password" />
+		</div>
+		<button type="submit" class="btn btn-primary align-self-center">Register</button>
+		<p>Already have an account? <span class="switch-form-text" @onclick="SwitchForm">Login</span></p>
+	</div>
+</EditForm>
+
+@code {
+
+	[Parameter]
+	public EventCallback OnRequestLoginForm { get; set; }
+
+	IUser user = default!;
+
+	protected override Task OnInitializedAsync()
+	{
+		user ??= new UserRegisterModel();
+		return Task.CompletedTask;
+	}
+
+	async Task Register()
+	{
+		bool registerResult = await RegisterService.RegisterAsync(user);
+	}
+
+	async Task SwitchForm() => await OnRequestLoginForm.InvokeAsync();
+}

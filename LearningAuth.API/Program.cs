@@ -1,14 +1,10 @@
 using LearningAuth.API.Authentication;
 using LearningAuth.API.Services;
+using LearningAuth.DataAccess;
 using LearningAuth.DataAccess.Repositories;
 using LearningAuth.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +17,18 @@ builder.Services.AddSwaggerGen();
 
 var key = builder.Configuration["secretKey"] ?? throw new Exception("Key not found in user secrets!");
 
+// Add custom authentication services
 builder.Services.AddScoped(sp => new JwtService(key, "http://localhost:5076"));
 builder.Services.AddScoped<JwtAuthenticator>();
 
-builder.Services.AddScoped(sp => new UserService(new InMemoryUserRepository()));
+// Add data access services
+// 1. Db Context
+builder.Services.AddDbContext<UsersDbContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// 2. Repositories and services to facilate interaction between API and DB.
+builder.Services.AddScoped<IUserRepository<IUser>, InMemoryUserRepository>();
+builder.Services.AddScoped<UserService>();
 
 // Add CORS service to allow cross-origin requests
 builder.Services.AddCors(options =>
