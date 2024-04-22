@@ -13,5 +13,5 @@ namespace LearningAuth.DataAccess.Repositories;
 /// <typeparam name="T"></typeparam>
 public interface IUserRepository<T> : IRepository<T>, IUserUpdates where T : IUser
 {
-	Task<T?> Find(IUserLoginModel username);
+	Task<T?> Find(IUserLoginModel user);
 }

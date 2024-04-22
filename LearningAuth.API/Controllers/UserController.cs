@@ -1,4 +1,5 @@
 ﻿using LearningAuth.API.Authentication;
+using LearningAuth.API.Services;
 using LearningAuth.DataAccess.Repositories;
 using LearningAuth.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -10,16 +11,16 @@ using System.Security.Claims;
 
 namespace LearningAuth.API.Controllers;
 [ApiController]
-public class UserController(JwtAuthenticator auth, IUserRepository<UserEntity> repository) : ControllerBase
+public class UserController(JwtAuthenticator auth, UserService userService) : ControllerBase
 {
 	private readonly JwtAuthenticator _auth = auth;
-	private readonly IUserRepository<UserEntity> _repository = repository;
+	private readonly UserService _userService = userService;
 
 	[HttpPost("/login")]
 	[AllowAnonymous]
 	public async Task<IActionResult> Login(UserLoginModel user)
 	{
-		UserEntity? foundUser = await _repository.Find(user);
+		UserEntity? foundUser = await _userService.Find(user);
 
 		if (foundUser == null)
 		{
