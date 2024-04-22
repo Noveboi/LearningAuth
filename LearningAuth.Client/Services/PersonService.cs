@@ -12,7 +12,7 @@ public class PersonService(ApiService apiService)
 
 	public string ResultMessage { get; set; } = string.Empty;
 
-	public async Task<PersonModel?> GetRandomPerson()
+	public async Task<PersonModel?> GetRandomPersonAsync()
 	{
 		ResultMessage = string.Empty;
 

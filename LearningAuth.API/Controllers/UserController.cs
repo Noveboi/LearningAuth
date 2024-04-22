@@ -19,7 +19,7 @@ public class UserController(JwtAuthenticator auth, IUserRepository<UserEntity> r
 	[AllowAnonymous]
 	public async Task<IActionResult> Login(UserLoginModel user)
 	{
-		IUser? foundUser = await _repository.Find(user);
+		UserEntity? foundUser = await _repository.Find(user);
 
 		if (foundUser == null)
 		{

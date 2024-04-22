@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace LearningAuth.Models;
 
-public interface IUserWithToken : IUser
+/// <summary>
+/// Used for transferring data between API and client when logging in.
+/// </summary>
+public interface IUserWithToken 
 {
+	UserEntity User { get; set; }
 	string Token { get; set; }
 }

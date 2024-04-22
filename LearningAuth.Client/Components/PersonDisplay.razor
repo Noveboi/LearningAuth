@@ -20,7 +20,7 @@
 
 	async Task SendGetPerson()
 	{
-		_person = await PersonService.GetRandomPerson();
+		_person = await PersonService.GetRandomPersonAsync();
 
 		_highlight = _person != null && _person.FirstName == "Maraki" && _person.LastName == "Dimitroulaki";
 	}

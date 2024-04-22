@@ -20,10 +20,7 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 	/// </summary>
 	public string LoginMessage { get; private set; } = string.Empty;
 
-	// TODO: Return an IUser implementation
-	// TODO: Return an IUser implementation
-	// TODO: Return an IUser implementation
-	public async Task Login(UserLoginModel user, bool rememberUser)
+	public async Task<IUser?> LoginAsync(UserLoginModel user, bool rememberUser)
 	{
 		using var response = await _apiService.PostAsync("/login", user);
 
@@ -44,14 +41,20 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 				await _localStorage.SetItemAsStringAsync(_jwtKey, userWithToken.Token);
 			}
 
-			LoginMessage = $"Welcome {userWithToken.FirstName} {userWithToken.LastName}!";
+			IUser userInfo = userWithToken.User;
+
+			LoginMessage = $"Welcome {userInfo.FirstName} {userInfo.LastName}!";
 			_apiService.SetAuthToken(userWithToken.Token);
+
+			return userInfo;
 		}
 		else
 		{
 			string content = await response.Content.ReadAsStringAsync();
 			LoginMessage = content;
 		}
+
+		return null;
 	}
 
 	public async Task TryGetAuthToken()

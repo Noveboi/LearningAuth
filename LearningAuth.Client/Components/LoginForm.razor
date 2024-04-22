@@ -1,14 +1,14 @@
 ﻿@inject LoginService LoginService
 
-<EditForm Model="_user" OnValidSubmit="SubmitCredentials" class="d-flex justify-content-center">
+<EditForm Model="_userModel" OnValidSubmit="SubmitCredentials" class="d-flex justify-content-center">
 	<div class="d-flex flex-column align-items-start">
 		<div class="form-field">
 			<label>Username</label>
-			<InputText @bind-Value="_user.Username" />
+			<InputText @bind-Value="_userModel.Username" />
 		</div>
 		<div class="form-field">
 			<label>Password</label>
-			<InputText type="password" @bind-Value="_user.Password" />
+			<InputText type="password" @bind-Value="_userModel.Password" />
 		</div>
 		<div class="remember-me">
 			<label> Remember Me</label>
@@ -20,10 +20,13 @@
 		<ValidationSummary />
 	</div>
 </EditForm>
-<h3 class="@(_confirmMessageStyle) align-self-center">@LoginService.LoginMessage</h3>
+<h3 class="@(_confirmMessageStyle) text-align-center">@LoginService.LoginMessage</h3>
 
 @code {
-	UserLoginModel _user = default!;
+	[Parameter]
+	public EventCallback<IUser> OnSuccessfulLogin { get; set; }
+
+	UserLoginModel _userModel = default!;
 
 	const string displayNone = "set-display-none";
 
@@ -36,15 +39,22 @@
 
 	protected override async Task OnInitializedAsync() 
 	{
-		_user ??= new();
+		_userModel ??= new();
 		await LoginService.TryGetAuthToken();
 	}
 
 	async Task SubmitCredentials() 
 	{
-		_loginButtonStyle = displayNone;
 		_loaderStyle = string.Empty;
-		await LoginService.Login(_user, _rememberUser);
+
+		IUser? user = await LoginService.LoginAsync(_userModel, _rememberUser);
+		await OnSuccessfulLogin.InvokeAsync(user);
+
+		if (user != null)
+		{
+			_loginButtonStyle = displayNone;
+		}
+
 		_loaderStyle = displayNone;
 		_confirmMessageStyle = string.Empty;
 	}
