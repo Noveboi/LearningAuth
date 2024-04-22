@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LearningAuth.Models;
 
-public interface IPasswordVisible
+public class LoginUserDto : IBasicUser, IPasswordHashed
 {
-	[DataType(DataType.Password)]
-	string Password { get; set; }
+	public string Username { get; set; }
+	public byte[] PasswordHash { get; set; }
 }

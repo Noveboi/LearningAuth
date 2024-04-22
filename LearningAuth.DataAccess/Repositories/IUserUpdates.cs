@@ -14,5 +14,5 @@ public interface IUserUpdates
     Task<bool> UpdateFirstName(int userId, string newFirstName);
 	Task<bool> UpdateLastName(int userId, string newLastName);
 	Task<bool> UpdateUsername(int userId, string newUsername);
-	Task<bool> UpdatePassword(int userId, string newPassword);
+	Task<bool> UpdatePassword(int userId, byte[] newPassword);
 }

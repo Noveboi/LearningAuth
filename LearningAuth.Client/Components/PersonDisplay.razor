@@ -16,13 +16,7 @@
 </div>
 @code {
 	PersonModel? _receivedPerson;
-	PersonModel _personFormModel = default!;
 	bool _highlight = false;
-
-	protected override void OnInitialized()
-	{
-		_personFormModel ??= new();
-	}
 
 	async Task SendGetPerson()
 	{

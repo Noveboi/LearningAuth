@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace LearningAuth.DataAccess.Repositories;
 /// <summary>
 /// Retains an in-memory array of user objects and implements all necessary CRUD methods.
 /// </summary>
-public class InMemoryUserRepository : IUserRepository<IUser>
+public class InMemoryUserRepository : IUserRepository
 {
 	// Retain users list for the entire application lifetime
 	// Fill repository with sample data
@@ -25,29 +26,29 @@ public class InMemoryUserRepository : IUserRepository<IUser>
 
 	private static int _currentId = 4;
 
-	public Task<IUserEntity?> Find(string username, string plainPassword)
+	public Task<IUser?> Find(string username, byte[] password)
 	{
-		var foundUser = (IUserEntity?)_users.FirstOrDefault(u => 
+		var foundUser = (IUser?)_users.FirstOrDefault(u => 
 		{
-			return u.Username == username && Enumerable.SequenceEqual(u.PasswordHash, Hasher.Hash(plainPassword));
+			return u.Username == username && Enumerable.SequenceEqual(u.PasswordHash, password);
 		});
 
 		return Task.FromResult(foundUser);
 	}
 
-	public Task Insert(IUser user)
+	public Task Insert(UserDto user)
 	{
 		_currentId++;
 		_users.Add(new UserEntity(user)
 		{
 			Id = _currentId,
-			PasswordHash = Hasher.Hash(user.Password)
+			PasswordHash = user.PasswordHash
 		});
 
 		return Task.CompletedTask;
 	}
 
-	public Task InsertRange(IEnumerable<IUser> users)
+	public Task InsertRange(IEnumerable<UserDto> users)
 	{
 		foreach (var user in users)
 		{
@@ -57,14 +58,20 @@ public class InMemoryUserRepository : IUserRepository<IUser>
 		return Task.CompletedTask;
 	}
 
-	public Task<IEnumerable<IUser>> Read()
+	public Task<IEnumerable<UserDto>> Read()
 	{
-		return Task.FromResult((IEnumerable<IUser>)_users);
+		return Task.FromResult((IEnumerable<UserDto>)_users);
 	}
 
-	public Task<IUser?> ReadOne(int userId)
+	public Task<UserDto?> ReadOne(int userId)
 	{
-		return Task.FromResult((IUser?)_users.FirstOrDefault(u => u.Id == userId));
+		var foundUser = _users.FirstOrDefault(u => u.Id == userId);
+		UserDto? user = null;
+		if (foundUser != null)
+		{
+			user = new UserDto(foundUser);
+		}
+		return Task.FromResult(user);
 	}
 
 	public Task<bool> Delete(int userId)
@@ -108,13 +115,13 @@ public class InMemoryUserRepository : IUserRepository<IUser>
 		return Task.FromResult(false);
 	}
 
-	public Task<bool> UpdatePassword(int userId, string newPassword)
+	public Task<bool> UpdatePassword(int userId, byte[] newPassword)
 	{
 		var user = _users.FirstOrDefault(u => u.Id == userId);
 
 		if (user != null)
 		{
-			user.PasswordHash = Hasher.Hash(newPassword);
+			user.PasswordHash = newPassword;
 			return Task.FromResult(true);
 		}
 

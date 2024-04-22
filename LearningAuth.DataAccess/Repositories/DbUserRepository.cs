@@ -12,47 +12,47 @@ namespace LearningAuth.DataAccess.Repositories;
 /// Contains a <see cref="UsersDbContext"/> dependency that interacts with an SQL Server database instance using EF Core.
 /// </summary>
 /// <param name="dbContext"></param>
-public class DbUserRepository(UsersDbContext dbContext) : IUserRepository<IUser>
+public class DbUserRepository(UsersDbContext dbContext) : IUserRepository
 {
 	private readonly UsersDbContext _dbContext = dbContext;
 
-	public async Task<IUserEntity?> Find(string username, string password)
+	public async Task<IUser?> Find(string username, byte[] password)
 	{
-		return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == Hasher.Hash(password));
+		return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == password);
 	}
 
-	public async Task Insert(IUser user)
+	public async Task Insert(UserDto user)
 	{
 		await _dbContext.AddAsync(new UserEntity(user)
 		{
 			// Let DB handle ID auto-increment
-			PasswordHash = Hasher.Hash(user.Password)
+			PasswordHash = user.PasswordHash
 		});
 
 		await _dbContext.SaveChangesAsync();
 	}
 
-	public async Task InsertRange(IEnumerable<IUser> users)
+	public async Task InsertRange(IEnumerable<UserDto> users)
 	{
 		foreach (var user in users)
 		{
 			await _dbContext.AddAsync(new UserEntity(user)
 			{
 				// Let DB handle ID auto-increment
-				PasswordHash = Hasher.Hash(user.Password)
+				PasswordHash = user.PasswordHash
 			});
 		}
 		await _dbContext.SaveChangesAsync();
 	}
 
-	public async Task<IEnumerable<IUser>> Read()
+	public async Task<IEnumerable<UserDto>> Read()
 	{
-		return await _dbContext.Users.Cast<IUser>().ToListAsync();
+		return await _dbContext.Users.Cast<UserDto>().ToListAsync();
 	}
 
-	public async Task<IUser?> ReadOne(int userId)
+	public async Task<UserDto?> ReadOne(int userId)
 	{
-		return (IUser?)await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
+		return (UserDto?)await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
 	}
 
 	public async Task<bool> Delete(int userId)
@@ -107,12 +107,12 @@ public class DbUserRepository(UsersDbContext dbContext) : IUserRepository<IUser>
 		return false;
 	}
 
-	public async Task<bool> UpdatePassword(int userId, string newPassword)
+	public async Task<bool> UpdatePassword(int userId, byte[] newPassword)
 	{
 		UserEntity? foundUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
 		if (foundUser != null)
 		{
-			foundUser.PasswordHash = Hasher.Hash(newPassword);
+			foundUser.PasswordHash = newPassword;
 			await _dbContext.SaveChangesAsync();
 			return true;
 		}

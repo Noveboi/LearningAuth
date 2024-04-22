@@ -19,7 +19,7 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 
 	[HttpPost("/login")]
 	[AllowAnonymous]
-	public async Task<IActionResult> Login(UserLoginModel user)
+	public async Task<IActionResult> Login(LoginUserDto user)
 	{
 		var foundUser = await _userService.Find(user);
 
@@ -36,7 +36,7 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 
 	[HttpPost("/register")]
 	[AllowAnonymous]
-	public async Task<IActionResult> Register(UserRegisterModel user)
+	public async Task<IActionResult> Register(UserDto user)
 	{
 		return Ok("Nice!");
 	}

@@ -4,14 +4,14 @@ using LearningAuth.Models;
 
 namespace LearningAuth.API.Services;
 
-public class UserService(IUserRepository<IUser> repository)
+public class UserService(IUserRepository repository)
 {
-	private readonly IUserRepository<IUser> _repository = repository;
+	private readonly IUserRepository _repository = repository;
 
-	public async Task<IUserEntity?> Find(UserLoginModel user) 
-		=> await _repository.Find(user.Username, user.Password);
+	public async Task<IUser?> Find(LoginUserDto user) 
+		=> await _repository.Find(user.Username, user.PasswordHash);
 
-	public async Task<bool> Register(IUser user)
+	public async Task<bool> Register(UserDto user)
 	{
 		return await Task.FromResult(true);
 	}

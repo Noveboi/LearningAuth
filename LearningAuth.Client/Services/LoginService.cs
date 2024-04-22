@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using LearningAuth.DataAccess;
 using LearningAuth.Models;
 
 using System.Net.Http.Json;
@@ -23,7 +24,13 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 
 	public async Task<DisplayUser?> LoginAsync(UserLoginModel user, bool rememberUser)
 	{
-		using var response = await _apiService.PostAsync("/login", user);
+		var dto = new LoginUserDto()
+		{
+			Username = user.Username,
+			PasswordHash = Hasher.Hash(user.Password)
+		};
+
+		using var response = await _apiService.PostAsync("/login", dto);
 
 		// If the operation was succesful, the user info along with the JWT Token are returned.
 		// Else, an error message is returned.

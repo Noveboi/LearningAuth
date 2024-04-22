@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LearningAuth.DataAccess;
 
-internal static class Hasher
+public static class Hasher
 {
-	internal static byte[] Hash(string plaintext) => MD5.HashData(Encoding.UTF8.GetBytes(plaintext));
+	public static byte[] Hash(string plaintext) => SHA256.HashData(Encoding.UTF8.GetBytes(plaintext));
 }

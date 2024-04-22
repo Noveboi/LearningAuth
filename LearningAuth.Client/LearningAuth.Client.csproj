@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LearningAPI.Models\LearningAuth.Models.csproj" />
+    <ProjectReference Include="..\LearningAuth.Security\LearningAuth.Security.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,8 @@ using LearningAuth.Models;
 
 namespace LearningAuth.Models;
 
-public class UserRegisterModel : IUser
+[MetadataType(typeof(IUser))]
+public class UserRegisterModel : IUser, IPasswordVisible
 {
 	public string FirstName { get; set; }
 	public string LastName { get; set; }

@@ -4,9 +4,9 @@ using LearningAuth.Models;
 
 namespace LearningAuth.Models;
 
+[MetadataType(typeof(IBasicUser))]
 public class UserLoginModel : IBasicUser, IPasswordVisible
 {
-
 	[Required]
 	public string Username { get; set; }
 	[Required]

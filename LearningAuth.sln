@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.Models", "Lear
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.Tests", "LearningAuth.Tests\LearningAuth.Tests.csproj", "{02DA8B13-5AB1-4E01-B1FA-A0BCB1BDCC12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAuth.DataAccess", "LearningAuth.DataAccess\LearningAuth.DataAccess.csproj", "{C408B6EE-D895-4EF4-99D6-CBB04B9C36BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.DataAccess", "LearningAuth.DataAccess\LearningAuth.DataAccess.csproj", "{C408B6EE-D895-4EF4-99D6-CBB04B9C36BB}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LearningAuth.Database", "LearningAuth.Database\LearningAuth.Database.sqlproj", "{25DD8EC9-8A51-48EB-AAE5-21F2333AEB62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAuth.Security", "LearningAuth.Security\LearningAuth.Security.csproj", "{A5DF780B-8633-4DE8-98E3-C0D7A1430FBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{25DD8EC9-8A51-48EB-AAE5-21F2333AEB62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25DD8EC9-8A51-48EB-AAE5-21F2333AEB62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25DD8EC9-8A51-48EB-AAE5-21F2333AEB62}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A5DF780B-8633-4DE8-98E3-C0D7A1430FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5DF780B-8633-4DE8-98E3-C0D7A1430FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5DF780B-8633-4DE8-98E3-C0D7A1430FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5DF780B-8633-4DE8-98E3-C0D7A1430FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
