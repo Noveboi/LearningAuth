@@ -22,8 +22,12 @@ public class InMemoryUserRepository : IUserRepository<UserEntity>
 
 	public Task<bool> Exists(IUserLoginModel user)
 	{
-		var foundUser = _users.FirstOrDefault(u => u.Username == user.Username && u.Password == SampleHashPassword(user.Password));
-		return Task.FromResult(user != null);
+		
+		var foundUser = _users.FirstOrDefault(u => 
+		{
+			return u.Username == user.Username && Enumerable.SequenceEqual(u.Password, SampleHashPassword(user.Password));
+		});
+		return Task.FromResult(foundUser != null);
 	}
 
 	public Task Insert(IEnumerable<UserEntity> users)

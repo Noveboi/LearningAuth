@@ -22,7 +22,7 @@ var key = builder.Configuration["secretKey"] ?? throw new Exception("Key not fou
 
 builder.Services.AddScoped(sp => new JwtService(key, "http://localhost:5076"));
 builder.Services.AddScoped<JwtAuthenticator>();
-builder.Services.AddScoped<IRepository<UserEntity>, InMemoryUserRepository>();
+builder.Services.AddScoped<IUserRepository<UserEntity>, InMemoryUserRepository>();
 
 // Add CORS service to allow cross-origin requests
 builder.Services.AddCors(options =>
