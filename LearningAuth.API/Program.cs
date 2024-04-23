@@ -27,7 +27,7 @@ builder.Services.AddDbContext<UsersDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 2. Repositories and services to facilate interaction between API and DB.
-builder.Services.AddScoped<IUserRepository, InMemoryUserRepository>();
+builder.Services.AddScoped<IUserRepository, DbUserRepository>();
 builder.Services.AddScoped<UserService>();
 
 // Add CORS service to allow cross-origin requests

@@ -10,7 +10,6 @@ using LearningAuth.Models;
 
 namespace LearningAuth.Models;
 
-[MetadataType(typeof(IUserEntity))]
 public class UserEntity : IUserEntity
 { 
 	public UserEntity() { }
@@ -23,8 +22,13 @@ public class UserEntity : IUserEntity
 
 	[Key]
 	public int Id { get; set; }
+	[MaxLength(20)]
 	public string Username { get; set; }
+	[MaxLength(50)]
 	public string FirstName { get; set; }
+	[MaxLength(50)]
+
 	public string LastName { get; set; }
+	[DataType(DataType.Password)]
 	public byte[] PasswordHash { get; set; }
 }
