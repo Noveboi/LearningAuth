@@ -10,13 +10,13 @@ public class JwtAuthenticator(JwtService jwtService)
 {
 	private readonly JwtService _jwtService = jwtService;
 
-	public string CreateUserToken(IBasicUser user)
+	public string CreateUserToken(IBasicUser user, string role)
 	{
 		// Construct the Claims Principal and create the cookie.
 		var claims = new List<Claim>()
 		{
 			new(ClaimTypes.Name, user.Username),
-			new(ClaimTypes.Role, "Customer")
+			new(ClaimTypes.Role, role)
 		};
 
 		var identity = new ClaimsIdentity(claims, "Jwt");

@@ -30,7 +30,7 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 
 		IUser foundUser = loginResult.Data!;
 
-		var token = _auth.CreateUserToken(user);
+		var token = _auth.CreateUserToken(user, foundUser.Role);
 		IUserWithToken userObjectWithToken = new UserWithToken((UserEntity)foundUser, token);
 
 		return Ok(userObjectWithToken);
