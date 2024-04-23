@@ -9,13 +9,10 @@ namespace LearningAuth.Client.Services;
 /// <summary>
 /// Interacts with the API for authentication/authorization purposes
 /// </summary>
-public class LoginService(ILocalStorageService localStorage, ApiService apiService, UserService userService)
+public class LoginService(ApiService apiService, UserService userService)
 {
-	private readonly ILocalStorageService _localStorage = localStorage;
 	private readonly ApiService _apiService = apiService;
 	private readonly UserService _userService = userService;
-
-	private const string _jwtKey = "jwtToken";
 
 	/// <summary>
 	/// After <see cref="Login(UserLoginModel, bool)"/> is called, an informative message about the result of the login 
@@ -45,15 +42,15 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 				throw new Exception("Something went wrong, deserialized into a NULL IUserWithToken object.");
 			}
 
-			if (rememberUser)
-			{
-				await _localStorage.SetItemAsStringAsync(_jwtKey, userWithToken.Token);
-			}
-
 			LoginMessage = $"Welcome {userWithToken.FirstName} {userWithToken.LastName}!";
 			_apiService.SetAuthToken(userWithToken.Token);
 
 			_userService.SetUser(userWithToken, userWithToken.Token);
+
+			if (rememberUser)
+			{
+				await _userService.StoreToken(userWithToken.Token);
+			}
 
 			return true;
 		}
@@ -68,9 +65,10 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 
 	public async Task TryGetAuthToken()
 	{
-		string? token = await _localStorage.GetItemAsStringAsync(_jwtKey);
+		string? token = await _userService.TryGetToken();
 		if (token != null)
 		{
+			// Wire HttpClient to send Authorization headers with each subsequent Auth request
 			_apiService.SetAuthToken(token);
 		}
 	}

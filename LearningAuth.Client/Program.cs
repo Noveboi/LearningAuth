@@ -30,7 +30,7 @@ builder.Services.AddTransient(sp =>
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<ApiService>();
-builder.Services.AddSingleton<UserService>();
+builder.Services.AddScoped<UserService>();
 
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<RegisterService>();

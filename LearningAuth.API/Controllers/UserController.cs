@@ -21,7 +21,7 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 	[AllowAnonymous]
 	public async Task<IActionResult> Login(LoginUserDto user)
 	{
-		var loginResult = await _userService.Find(user);
+		var loginResult = await _userService.CheckExists(user);
 
 		if (!loginResult.IsOk)
 		{
@@ -34,6 +34,39 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 		IUserWithToken userObjectWithToken = new UserWithToken((UserEntity)foundUser, token);
 
 		return Ok(userObjectWithToken);
+	}
+
+	/// <summary>
+	/// USE CASE: 
+	///		When a user has a JWT Token available without logging in (e.g. local storage). They send out a 
+	///		request details request to get all the necessary user info they need for their client.
+	/// </summary>
+	/// <returns></returns>
+	[HttpGet("/requestDetails")]
+	[Authorize]
+	public async Task<IActionResult> RequestUserDetails()
+	{
+		var userIdentity = User.Identity;
+
+		if (userIdentity != null)
+		{
+			var username = userIdentity.Name;
+			if (username != null)
+			{
+				var findResult = await _userService.FindByUsername(username);
+				
+				if (findResult.IsOk == false)
+				{
+					return BadRequest(findResult.Error!.Description);
+				}
+
+				return Ok(findResult.Data!);
+			}
+
+			return BadRequest("User identity has null username");
+		}
+
+		return BadRequest("User doesn't have an identity");
 	}
 
 	[HttpPost("/register")]

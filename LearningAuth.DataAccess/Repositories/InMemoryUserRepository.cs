@@ -28,7 +28,7 @@ public class InMemoryUserRepository : IUserRepository
 
 	private static int _currentId = 4;
 
-	public Task<IUser?> Find(string username, byte[] password)
+	public Task<IUser?> CheckExists(string username, byte[] password)
 	{
 		var foundUser = (IUser?)_users.FirstOrDefault(u => 
 		{
@@ -36,6 +36,11 @@ public class InMemoryUserRepository : IUserRepository
 		});
 
 		return Task.FromResult(foundUser);
+	}
+
+	public Task<IUser?> FindByUsername(string username)
+	{
+		return Task.FromResult((IUser?)_users.FirstOrDefault(u => u.Username == username));
 	}
 
 	public Task Insert(UserDto user)

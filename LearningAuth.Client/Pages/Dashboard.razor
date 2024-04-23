@@ -1,10 +1,14 @@
 ﻿@page "/dashboard"
 @inject UserService UserService
 @inject NavigationManager NavManager
-@if (_user == null)
+@if (_user == null && UserService.CanRequestDetails == false)
 {
 	<h1 class="text-center text-danger">You are unauthorized to use this page because you are not logged in!</h1>
 	<h3 class="text-center">Click <NavLink href="/">here</NavLink> to go to the login page.</h3>
+}
+else if (_user == null && UserService.CanRequestDetails)
+{
+	<h1 class="text-center">Please wait, retrieving user information...</h1>
 }
 else
 {
@@ -17,8 +21,18 @@ else
 @code {
 	DisplayUser _user = default!;
 
-	protected override void OnInitialized()
-	{
+	protected override async Task OnInitializedAsync()
+	{	
 		_user ??= UserService.User;
+
+		if (_user == null && UserService.CanRequestDetails)
+		{
+			bool success = await UserService.RequestUserDetails();
+
+			if (success)
+			{
+				_user = UserService.User;
+			}
+		}
 	}
 }

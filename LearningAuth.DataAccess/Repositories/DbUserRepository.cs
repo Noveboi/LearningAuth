@@ -16,9 +16,14 @@ public class DbUserRepository(UsersDbContext dbContext) : IUserRepository
 {
 	private readonly UsersDbContext _dbContext = dbContext;
 
-	public async Task<IUser?> Find(string username, byte[] password)
+	public async Task<IUser?> CheckExists(string username, byte[] password)
 	{
 		return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username && u.PasswordHash == password);
+	}
+
+	public async Task<IUser?> FindByUsername(string username)
+	{
+		return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
 	}
 
 	public async Task Insert(UserDto user)

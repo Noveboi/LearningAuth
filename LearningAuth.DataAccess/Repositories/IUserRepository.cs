@@ -12,5 +12,6 @@ namespace LearningAuth.DataAccess.Repositories;
 /// </summary>
 public interface IUserRepository : IRepository<UserDto>, IUserUpdates 
 {
-	Task<IUser?> Find(string username, byte[] password);
+	Task<IUser?> CheckExists(string username, byte[] password);
+	Task<IUser?> FindByUsername(string username);
 }
