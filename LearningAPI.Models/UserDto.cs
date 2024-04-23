@@ -21,11 +21,20 @@ public class UserDto : IUser, IPasswordHashed
 		LastName = userEntity.LastName;
 		PasswordHash = userEntity.PasswordHash;
 	}
+	public UserDto(IUser user, byte[] hashedPassword)
+	{
+		Username = user.Username;
+		FirstName = user.FirstName;
+		LastName = user.LastName;
+		PasswordHash = hashedPassword;
+	}
 
 	public byte[] PasswordHash { get; set; }
 	public string Username { get; set; }
 	public string FirstName { get; set; }
 	public string LastName { get; set; }
+
+	// Common casting scenarios that occur are handled manually here.
 
 	public static explicit operator UserDto?(UserEntity? userEntity)
 	{

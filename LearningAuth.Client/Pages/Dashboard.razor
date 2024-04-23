@@ -1,0 +1,24 @@
+﻿@page "/dashboard"
+@inject UserService UserService
+@inject NavigationManager NavManager
+@if (_user == null)
+{
+	<h1 style="text-center text-danger">You are unauthorized to use this page because you are not logged in!</h1>
+	<h3 style="text-center">Click <NavLink href="/">here</NavLink> to go to the login page.</h3>
+}
+else
+{
+	<h1 style="text-center">Dashboard of @(UserService.User.FirstName) @(UserService.User.LastName)</h1>
+	<div style="height: 200px" class="d-flex justify-content-center align-items-center">
+		<PersonDisplay />
+	</div>
+}
+
+@code {
+	DisplayUser _user = default!;
+
+	protected override void OnInitialized()
+	{
+		_user ??= UserService.User;
+	}
+}

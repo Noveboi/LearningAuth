@@ -1,4 +1,6 @@
 ﻿using LearningAuth.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +46,6 @@ public class InMemoryUserRepository : IUserRepository
 			Id = _currentId,
 			PasswordHash = user.PasswordHash
 		});
-
 		return Task.CompletedTask;
 	}
 

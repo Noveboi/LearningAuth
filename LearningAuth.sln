@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.DataAccess", "
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "LearningAuth.Database", "LearningAuth.Database\LearningAuth.Database.sqlproj", "{25DD8EC9-8A51-48EB-AAE5-21F2333AEB62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningAuth.Security", "LearningAuth.Security\LearningAuth.Security.csproj", "{A5DF780B-8633-4DE8-98E3-C0D7A1430FBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningAuth.Security", "LearningAuth.Security\LearningAuth.Security.csproj", "{A5DF780B-8633-4DE8-98E3-C0D7A1430FBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

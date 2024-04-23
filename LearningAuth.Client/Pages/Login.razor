@@ -1,0 +1,20 @@
+﻿@page "/"
+@inject NavigationManager NavManager
+
+@if (_loginFormVisible)
+{
+	<LoginForm OnRequestRegisterForm="() => _loginFormVisible = false" OnSuccessfulLogin="GoToDashboard"/>
+}
+else
+{
+	<RegisterForm OnRequestLoginForm="() => _loginFormVisible = true" />
+}
+
+@code {
+	bool _loginFormVisible = true;
+
+	void GoToDashboard()
+	{
+		NavManager.NavigateTo("/dashboard");	
+	}
+}

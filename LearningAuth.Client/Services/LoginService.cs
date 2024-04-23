@@ -9,10 +9,11 @@ namespace LearningAuth.Client.Services;
 /// <summary>
 /// Interacts with the API for authentication/authorization purposes
 /// </summary>
-public class LoginService(ILocalStorageService localStorage, ApiService apiService)
+public class LoginService(ILocalStorageService localStorage, ApiService apiService, UserService userService)
 {
 	private readonly ILocalStorageService _localStorage = localStorage;
 	private readonly ApiService _apiService = apiService;
+	private readonly UserService _userService = userService;
 
 	private const string _jwtKey = "jwtToken";
 
@@ -52,12 +53,16 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 			LoginMessage = $"Welcome {userWithToken.FirstName} {userWithToken.LastName}!";
 			_apiService.SetAuthToken(userWithToken.Token);
 
-			return new DisplayUser()
+			var displayUser = new DisplayUser()
 			{
 				FirstName = userWithToken.FirstName,
 				LastName = userWithToken.LastName,
 				Username = userWithToken.Username
 			};
+
+			_userService.SetUser(displayUser);
+
+			return displayUser;
 		}
 		else
 		{

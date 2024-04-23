@@ -21,12 +21,14 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 	[AllowAnonymous]
 	public async Task<IActionResult> Login(LoginUserDto user)
 	{
-		var foundUser = await _userService.Find(user);
+		var loginResult = await _userService.Find(user);
 
-		if (foundUser == null)
+		if (!loginResult.IsOk && loginResult.Error!.Type == Models.Messages.ErrorType.DoesntExist)
 		{
-			return Unauthorized($"Wrong username or password, try again.");
+			return Unauthorized(loginResult.Error.Description);
 		}
+
+		IUser foundUser = loginResult.Data!;
 
 		var token = _auth.CreateUserToken(user);
 		IUserWithToken userObjectWithToken = new UserWithToken((UserEntity)foundUser, token);
@@ -38,6 +40,13 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 	[AllowAnonymous]
 	public async Task<IActionResult> Register(UserDto user)
 	{
-		return Ok("Nice!");
+		var registerResult = await _userService.Register(user);
+
+		if (!registerResult.IsOk)
+		{
+			return BadRequest(registerResult.Error!.Description);
+		}
+
+		return Ok();
 	}
 }

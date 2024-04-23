@@ -28,7 +28,10 @@ builder.Services.AddTransient(sp =>
 // Add browser local storage for remembering the user login.
 // TODO: Add refresh token
 builder.Services.AddBlazoredLocalStorage();
+
 builder.Services.AddScoped<ApiService>();
+builder.Services.AddSingleton<UserService>();
+
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<RegisterService>();
 builder.Services.AddScoped<PersonService>();
