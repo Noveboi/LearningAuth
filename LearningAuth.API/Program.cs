@@ -22,12 +22,24 @@ builder.Services.AddScoped(sp => new JwtService(key, "http://localhost:5076"));
 builder.Services.AddScoped<JwtAuthenticator>();
 
 // Add data access services
-// 1. Db Context
-builder.Services.AddDbContext<UsersDbContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 2. Repositories and services to facilate interaction between API and DB.
-builder.Services.AddScoped<IUserRepository, DbUserRepository>();
+string dataSource = builder.Configuration["DataSource"] ?? throw new Exception("Please provide a data source in appsettings.json!");
+
+if (dataSource == "Database")
+{
+	builder.Services.AddDbContext<UsersDbContext>(options =>
+		options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+	builder.Services.AddScoped<IUserRepository, DbUserRepository>();
+}
+else if (dataSource == "InMemory")
+{
+	builder.Services.AddScoped<IUserRepository, InMemoryUserRepository>();
+}
+else
+{
+	throw new Exception($"Data source with value: \'{dataSource}\' is not a valid data source.");
+}
+
 builder.Services.AddScoped<UserService>();
 
 // Add CORS service to allow cross-origin requests
