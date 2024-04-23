@@ -20,6 +20,8 @@ public class UserDto : IUser, IPasswordHashed
 		FirstName = userEntity.FirstName;
 		LastName = userEntity.LastName;
 		PasswordHash = userEntity.PasswordHash;
+		Role = userEntity.Role;
+		IsActive = userEntity.IsActive;
 	}
 	public UserDto(IUser user, byte[] hashedPassword)
 	{
@@ -27,9 +29,13 @@ public class UserDto : IUser, IPasswordHashed
 		FirstName = user.FirstName;
 		LastName = user.LastName;
 		PasswordHash = hashedPassword;
+		Role = user.Role;
+		IsActive = user.IsActive;
 	}
 
 	public byte[] PasswordHash { get; set; }
+	public string Role { get; set; }
+	public bool IsActive { get; set; }
 	public string Username { get; set; }
 	public string FirstName { get; set; }
 	public string LastName { get; set; }

@@ -26,6 +26,7 @@ public class DbUserRepository(UsersDbContext dbContext) : IUserRepository
 		await _dbContext.AddAsync(new UserEntity(user)
 		{
 			// Let DB handle ID auto-increment
+			Role = user.Role,
 			PasswordHash = user.PasswordHash
 		});
 
@@ -39,6 +40,7 @@ public class DbUserRepository(UsersDbContext dbContext) : IUserRepository
 			await _dbContext.AddAsync(new UserEntity(user)
 			{
 				// Let DB handle ID auto-increment
+				Role = user.Role,
 				PasswordHash = user.PasswordHash
 			});
 		}
@@ -60,7 +62,7 @@ public class DbUserRepository(UsersDbContext dbContext) : IUserRepository
 		UserEntity? foundUser = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
 		if (foundUser != null)
 		{
-			_dbContext.Users.Remove(foundUser);
+			foundUser.IsActive = false;
 			await _dbContext.SaveChangesAsync();
 			return true;
 		}

@@ -10,4 +10,8 @@ namespace LearningAuth.Models;
 /// Defines all the necessary properties a user should have along with all details (such as first and last name).
 /// Does NOT define how a password is represented.
 /// </summary>
-public interface IUser : IBasicUser, IUserDetails { }
+public interface IUser : IBasicUser, IUserDetails 
+{ 
+	public string Role { get; set; }
+	public bool IsActive { get; set; }
+}

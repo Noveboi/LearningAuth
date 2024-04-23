@@ -20,10 +20,10 @@ public class InMemoryUserRepository : IUserRepository
 	// Fill repository with sample data
 	private static readonly List<UserEntity> _users =
 	[  
-		new() { Id = 1, FirstName = "George", LastName = "Nikolaidis", Username = "nove", PasswordHash = Hasher.Hash("superPassword!") },
-		new() { Id = 2, FirstName = "Alexandros", LastName = "Zountas", Username = "alexZu", PasswordHash = Hasher.Hash("sensei_123") },
+		new() { Id = 1, FirstName = "George", LastName = "Nikolaidis", Username = "nove", PasswordHash = Hasher.Hash("superPassword!"), Role = "Admin"},
+		new() { Id = 2, FirstName = "Alexandros", LastName = "Zountas", Username = "alexZu", PasswordHash = Hasher.Hash("sensei_123"), Role = "Moderator" },
 		new() { Id = 3, FirstName = "Kostas", LastName = "Papadopoulos", Username = "kopa7", PasswordHash = Hasher.Hash("abcdef12345") },
-		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmmarry", PasswordHash = Hasher.Hash("epicMary!") }
+		new() { Id = 4, FirstName = "Maria", LastName = "Dimitrouli", Username = "Mmarry", PasswordHash = Hasher.Hash("epicMary!")}
 	];
 
 	private static int _currentId = 4;
@@ -44,6 +44,7 @@ public class InMemoryUserRepository : IUserRepository
 		_users.Add(new UserEntity(user)
 		{
 			Id = _currentId,
+			Role = user.Role,
 			PasswordHash = user.PasswordHash
 		});
 		return Task.CompletedTask;
@@ -81,8 +82,7 @@ public class InMemoryUserRepository : IUserRepository
 		
 		if (user != null)
 		{
-			_currentId--;
-			_users.Remove(user);
+			user.IsActive = false;
 			return Task.FromResult(true);
 		}
 

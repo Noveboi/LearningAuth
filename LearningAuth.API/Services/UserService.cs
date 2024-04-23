@@ -19,6 +19,11 @@ public class UserService(IUserRepository repository)
 			return ApiResult<IUser>.NotOk(Error.DoesntExist("User with given credentials doesn't exist. Please check that you've entered your username and password correctly."));
 		}
 
+		if (foundUser.IsActive == false)
+		{
+			return ApiResult<IUser>.NotOk(Error.UserInactive("This account has been deactivated."));
+		}
+
 		return ApiResult<IUser>.Ok(foundUser);
 	}
 

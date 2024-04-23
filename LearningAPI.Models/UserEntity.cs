@@ -24,6 +24,7 @@ public class UserEntity : IUserEntity
 	public int Id { get; set; }
 	[MaxLength(20)]
 	public string Username { get; set; }
+	public string Role { get; set; } = "Simple User";
 	[MaxLength(50)]
 	public string FirstName { get; set; }
 	[MaxLength(50)]
@@ -31,4 +32,5 @@ public class UserEntity : IUserEntity
 	public string LastName { get; set; }
 	[DataType(DataType.Password)]
 	public byte[] PasswordHash { get; set; }
+	public bool IsActive { get; set; } = true;
 }

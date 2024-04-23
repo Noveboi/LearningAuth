@@ -2,7 +2,7 @@
 using LearningAuth.API.Services;
 using LearningAuth.DataAccess.Repositories;
 using LearningAuth.Models;
-
+using LearningAuth.Models.Messages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.DataProtection;
@@ -23,9 +23,9 @@ public class UserController(JwtAuthenticator auth, UserService userService) : Co
 	{
 		var loginResult = await _userService.Find(user);
 
-		if (!loginResult.IsOk && loginResult.Error!.Type == Models.Messages.ErrorType.DoesntExist)
+		if (!loginResult.IsOk)
 		{
-			return Unauthorized(loginResult.Error.Description);
+			return Unauthorized(loginResult.Error!.Description);
 		}
 
 		IUser foundUser = loginResult.Data!;

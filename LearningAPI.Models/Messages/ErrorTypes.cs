@@ -26,6 +26,12 @@ public class Error
 		Description = description
 	};
 
+	public static Error UserInactive(string description) => new()
+	{
+		Type = ErrorType.UserInactive,
+		Description = description
+	};
+
 	public static Error Unauthorized(string description) => new()
 	{
 		Type = ErrorType.Unauthorized,
@@ -39,4 +45,5 @@ public enum ErrorType
 	DoesntExist,
 	AlreadyExists,
 	Validation,
+	UserInactive,
 }
