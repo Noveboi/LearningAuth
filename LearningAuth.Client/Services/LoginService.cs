@@ -53,7 +53,7 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 			LoginMessage = $"Welcome {userWithToken.FirstName} {userWithToken.LastName}!";
 			_apiService.SetAuthToken(userWithToken.Token);
 
-			_userService.SetUser(userWithToken);
+			_userService.SetUser(userWithToken, userWithToken.Token);
 
 			return true;
 		}

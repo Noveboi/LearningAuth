@@ -9,8 +9,9 @@ public class UserService
 {
 	public DisplayUser User { get; private set; } = default!;
 	public string Role { get; private set; } = default!;
+	public string Token { get; private set; } = default!;
 
-	public void SetUser(IUser user)
+	public void SetUser(IUser user, string jwt)
 	{
 		User = new DisplayUser()
 		{
@@ -19,5 +20,6 @@ public class UserService
 			Username = user.Username
 		};
 		Role = user.Role;
+		Token = jwt;
 	}
 }
