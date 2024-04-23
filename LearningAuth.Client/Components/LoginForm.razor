@@ -22,7 +22,7 @@
 		<p>Don't have an account? <span class="switch-form-text" @onclick="SwitchForm">Register</span></p>
 	</div>
 </EditForm>
-<h3 class="@(_confirmMessageStyle) text-align-center">@LoginService.LoginMessage</h3>
+<h3 class="@(_loginMessageStyle) text-align-center">@LoginService.LoginMessage</h3>
 
 @code {
 	[Parameter]
@@ -38,7 +38,7 @@
 
 	// Variables for showing/hiding certain HTML elements
 	string _loginButtonStyle = string.Empty;
-	string _confirmMessageStyle = displayNone;
+	string _loginMessageStyle = displayNone;
 	string _loaderStyle = displayNone;
 
 	protected override async Task OnInitializedAsync() 
@@ -52,15 +52,14 @@
 		_loaderStyle = string.Empty;
 
 		DisplayUser? user = await LoginService.LoginAsync(_userModel, _rememberUser);
-		await OnSuccessfulLogin.InvokeAsync(user);
 
 		if (user != null)
 		{
-			_loginButtonStyle = displayNone;
+			await OnSuccessfulLogin.InvokeAsync(user);
 		}
 
 		_loaderStyle = displayNone;
-		_confirmMessageStyle = string.Empty;
+		_loginMessageStyle = string.Empty;
 	}
 
 	async Task SwitchForm() => await OnRequestRegisterForm.InvokeAsync();
