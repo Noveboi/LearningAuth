@@ -26,7 +26,7 @@
 
 @code {
 	[Parameter]
-	public EventCallback<DisplayUser> OnSuccessfulLogin { get; set; }
+	public EventCallback OnSuccessfulLogin { get; set; }
 	[Parameter]
 	public EventCallback OnRequestRegisterForm { get; set; }
 
@@ -51,11 +51,11 @@
 	{
 		_loaderStyle = string.Empty;
 
-		DisplayUser? user = await LoginService.LoginAsync(_userModel, _rememberUser);
+		bool userLoginSuccess = await LoginService.LoginAsync(_userModel, _rememberUser);
 
-		if (user != null)
+		if (userLoginSuccess)
 		{
-			await OnSuccessfulLogin.InvokeAsync(user);
+			await OnSuccessfulLogin.InvokeAsync();
 		}
 
 		_loaderStyle = displayNone;

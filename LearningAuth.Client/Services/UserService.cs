@@ -8,12 +8,16 @@ namespace LearningAuth.Client.Services;
 public class UserService
 {
 	public DisplayUser User { get; private set; } = default!;
+	public string Role { get; private set; } = default!;
 
-	public void SetUser(DisplayUser user) => User = user;
-	public void SetUser(IUser user) => User = new DisplayUser()
+	public void SetUser(IUser user)
 	{
-		FirstName = user.FirstName,
-		LastName = user.LastName,
-		Username = user.Username
-	};
+		User = new DisplayUser()
+		{
+			FirstName = user.FirstName,
+			LastName = user.LastName,
+			Username = user.Username
+		};
+		Role = user.Role;
+	}
 }

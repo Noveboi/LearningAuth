@@ -23,7 +23,7 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 	/// </summary>
 	public string LoginMessage { get; private set; } = string.Empty;
 
-	public async Task<DisplayUser?> LoginAsync(UserLoginModel user, bool rememberUser)
+	public async Task<bool> LoginAsync(UserLoginModel user, bool rememberUser)
 	{
 		var dto = new LoginUserDto()
 		{
@@ -53,16 +53,9 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 			LoginMessage = $"Welcome {userWithToken.FirstName} {userWithToken.LastName}!";
 			_apiService.SetAuthToken(userWithToken.Token);
 
-			var displayUser = new DisplayUser()
-			{
-				FirstName = userWithToken.FirstName,
-				LastName = userWithToken.LastName,
-				Username = userWithToken.Username
-			};
+			_userService.SetUser(userWithToken);
 
-			_userService.SetUser(displayUser);
-
-			return displayUser;
+			return true;
 		}
 		else
 		{
@@ -70,7 +63,7 @@ public class LoginService(ILocalStorageService localStorage, ApiService apiServi
 			LoginMessage = content;
 		}
 
-		return null;
+		return false;
 	}
 
 	public async Task TryGetAuthToken()
